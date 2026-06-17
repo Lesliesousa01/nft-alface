@@ -5,114 +5,176 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1b5e20">
 <title>NFT Alface</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;background:#f0f4f1;color:#1a2e1a}
+html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;color:#1b2a1b;
+  background:linear-gradient(180deg,#eef3ef 0%,#e4ede6 100%)}
 :root{
-  --ya:#1565c0;--yab:#e3f2fd;--yas:#42a5f5;
-  --ha:#6a1b9a;--hab:#f3e5f5;--has:#ab47bc;
-  --g:#2e7d32;--gbg:#e8f5e9;--gl:#4caf50;
-  --gray:#607d8b;--shadow:0 2px 14px rgba(0,0,0,.09);
+  --ya:#1565c0;--ya2:#0d47a1;--yab:#e8f1fb;--yas:#42a5f5;
+  --ha:#7b1fa2;--ha2:#4a148c;--hab:#f6edfb;--has:#ba68c8;
+  --g:#2e7d32;--g2:#1b5e20;--gbg:#e8f5e9;--gl:#4caf50;
+  --gray:#62757f;--ink:#1b2a1b;
+  --line:rgba(20,40,25,.07);
+  --sh-sm:0 1px 2px rgba(20,40,25,.05);
+  --sh:0 1px 2px rgba(20,40,25,.04),0 10px 26px rgba(20,40,25,.07);
+  --sh-lg:0 2px 6px rgba(20,40,25,.06),0 18px 40px rgba(20,40,25,.12);
 }
-#app{height:100vh;display:flex;flex-direction:column;max-width:480px;margin:0 auto;background:#f0f4f1}
-#topbar{background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;padding:14px 20px 12px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
-#topbar h1{font-size:1.05rem;font-weight:700}
-#topbar p{font-size:.7rem;opacity:.75;margin-top:1px}
-#scrLbl{font-size:.7rem;background:rgba(255,255,255,.18);padding:3px 10px;border-radius:10px;opacity:.85}
-#content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 80px}
-#bottomnav{background:#fff;border-top:1px solid #e0e0e0;display:flex;flex-shrink:0}
-.bnbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 2px 10px;cursor:pointer;border:none;background:transparent;color:var(--gray);font-size:.62rem;font-weight:600;gap:3px;min-height:56px}
-.bnbtn .ico{font-size:1.2rem}
-.bnbtn.on-ya{color:var(--ya)}
-.bnbtn.on-ha{color:var(--ha)}
-.bnbtn.on-g{color:var(--g)}
-.screen{display:none}.screen.active{display:block}
+#app{height:100vh;display:flex;flex-direction:column;max-width:480px;margin:0 auto;
+  background:linear-gradient(180deg,#eef3ef,#e4ede6);position:relative;box-shadow:0 0 60px rgba(0,0,0,.06)}
 
-.card{background:#fff;border-radius:16px;padding:18px;margin-bottom:12px;box-shadow:var(--shadow)}
-.card-ttl{font-size:.85rem;font-weight:700;color:var(--g);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+/* ── TOPBAR ── */
+#topbar{position:relative;background:linear-gradient(135deg,#1b5e20,#2e7d32 55%,#388e3c);
+  color:#fff;padding:16px 20px 18px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 6px 20px rgba(27,94,32,.28);z-index:5;overflow:hidden}
+#topbar::after{content:"🥬";position:absolute;right:-14px;bottom:-28px;font-size:5.4rem;opacity:.12;transform:rotate(-12deg)}
+#topbar h1{font-size:1.12rem;font-weight:800;letter-spacing:.2px;display:flex;align-items:center;gap:7px}
+#topbar p{font-size:.68rem;opacity:.82;margin-top:2px;font-weight:500}
+#scrLbl{font-size:.66rem;font-weight:700;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);
+  padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.22);letter-spacing:.4px;text-transform:uppercase}
 
-.rec-hdr{color:#fff;border-radius:16px;padding:16px;margin-bottom:12px}
-.rec-hdr-ya{background:linear-gradient(135deg,var(--ya),var(--yas))}
-.rec-hdr-ha{background:linear-gradient(135deg,var(--ha),var(--has))}
-.rec-hdr .rh-t{font-size:1rem;font-weight:800}
-.rec-hdr .rh-s{font-size:.74rem;opacity:.88;margin-top:3px;line-height:1.4}
-.rec-hdr .rh-ec{font-size:.7rem;opacity:.78;margin-top:5px}
+#content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 14px 92px}
+.screen{display:none;animation:fade .28s ease}.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-.inp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+/* ── BOTTOM NAV ── */
+#bottomnav{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
+  border-top:1px solid var(--line);display:flex;flex-shrink:0;box-shadow:0 -6px 22px rgba(20,40,25,.08);padding:4px 4px 6px}
+.bnbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  padding:8px 2px 6px;cursor:pointer;border:none;background:transparent;color:var(--gray);
+  font-size:.6rem;font-weight:700;letter-spacing:.2px;min-height:54px;position:relative;transition:color .15s}
+.bnbtn .ico{font-size:1.18rem;width:40px;height:30px;display:flex;align-items:center;justify-content:center;
+  border-radius:14px;transition:background .18s,transform .18s}
+.bnbtn.on-ya{color:var(--ya)} .bnbtn.on-ya .ico{background:var(--yab);transform:translateY(-1px)}
+.bnbtn.on-ha{color:var(--ha)} .bnbtn.on-ha .ico{background:var(--hab);transform:translateY(-1px)}
+.bnbtn.on-g{color:var(--g)}   .bnbtn.on-g .ico{background:var(--gbg);transform:translateY(-1px)}
+
+/* ── CARDS ── */
+.card{background:#fff;border-radius:20px;padding:18px;margin-bottom:13px;box-shadow:var(--sh);border:1px solid rgba(255,255,255,.8)}
+.card-ttl{font-size:.86rem;font-weight:800;color:var(--ink);margin-bottom:15px;display:flex;align-items:center;gap:9px}
+.card-ttl .ci{width:30px;height:30px;border-radius:10px;background:var(--gbg);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0}
+
+/* ── RECIPE HEADER ── */
+.rec-hdr{position:relative;color:#fff;border-radius:20px;padding:18px 18px 16px;margin-bottom:14px;overflow:hidden;box-shadow:var(--sh-lg)}
+.rec-hdr-ya{background:linear-gradient(135deg,var(--ya2),var(--ya) 60%,var(--yas))}
+.rec-hdr-ha{background:linear-gradient(135deg,var(--ha2),var(--ha) 60%,var(--has))}
+.rec-hdr::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.10)}
+.rec-hdr::before{content:"";position:absolute;right:14px;bottom:-40px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.07)}
+.rh-t{font-size:1.12rem;font-weight:800;letter-spacing:.2px;position:relative}
+.rh-s{font-size:.72rem;opacity:.9;margin-top:4px;line-height:1.45;position:relative;max-width:88%}
+.rh-ec{display:inline-flex;align-items:center;gap:6px;font-size:.68rem;font-weight:700;margin-top:11px;
+  background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.25);padding:5px 11px;border-radius:20px;position:relative}
+
+/* ── TABS ── */
+.tab-row{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+.tab{padding:9px 15px;border-radius:22px;border:1.5px solid var(--line);background:#fff;font-size:.76rem;
+  font-weight:700;cursor:pointer;color:var(--gray);white-space:nowrap;flex-shrink:0;box-shadow:var(--sh-sm);transition:.15s}
+.tab.on{background:linear-gradient(135deg,var(--g2),var(--gl));color:#fff;border-color:transparent;box-shadow:0 5px 14px rgba(46,125,50,.32)}
+
+/* ── INPUTS ── */
+.inp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px}
 .inp-grid.g2{grid-template-columns:1fr 1fr}
-.inp-g label{display:block;font-size:.72rem;font-weight:700;color:var(--gray);margin-bottom:5px}
-.inp-g input{width:100%;padding:12px 8px;border:2px solid #e0e0e0;border-radius:10px;font-size:1.05rem;font-weight:700;text-align:center;outline:none;color:#263238}
-.inp-g input:focus{border-color:var(--gl)}
-.inp-g .unit{font-size:.68rem;color:var(--gray);margin-top:3px}
-.quick-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.qbtn{padding:5px 12px;border:1.5px solid #ddd;border-radius:14px;font-size:.75rem;font-weight:700;cursor:pointer;color:var(--gray);background:#fff}
-.qbtn.on{background:var(--g);color:#fff;border-color:var(--g)}
+.inp-g label{display:block;font-size:.68rem;font-weight:700;color:var(--gray);margin-bottom:6px;letter-spacing:.2px}
+.inp-g input{width:100%;padding:13px 6px;border:1.5px solid #e3e8e4;border-radius:13px;font-size:1.12rem;
+  font-weight:800;text-align:center;outline:none;color:var(--ink);background:#fbfcfb;transition:.15s}
+.inp-g input:focus{border-color:var(--gl);background:#fff;box-shadow:0 0 0 4px rgba(76,175,80,.13)}
+.inp-g .unit{font-size:.64rem;color:var(--gray);margin-top:4px;text-align:center;font-weight:600}
+.quick-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:4px}
+.qbtn{padding:7px 14px;border:1.5px solid #e3e8e4;border-radius:20px;font-size:.74rem;font-weight:700;
+  cursor:pointer;color:var(--gray);background:#fff;transition:.15s;box-shadow:var(--sh-sm)}
+.qbtn.on{background:linear-gradient(135deg,var(--g2),var(--gl));color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(46,125,50,.3)}
 
-.calc-btn{width:100%;padding:15px;border:none;border-radius:14px;font-size:1rem;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#1b5e20,#43a047);box-shadow:0 4px 14px rgba(46,125,50,.3);letter-spacing:.3px}
+/* ── EC BADGE ── */
+.ec-badge{border-radius:20px;padding:18px;margin-bottom:14px;color:#fff;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#1b5e20,#2e7d32 60%,#43a047);box-shadow:0 10px 26px rgba(27,94,32,.3)}
+.ec-badge::after{content:"";position:absolute;right:-26px;top:-26px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.09)}
+.ecb-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative}
+.ecb-lbl{font-size:.7rem;opacity:.85;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+.ecb-num{font-size:2.5rem;font-weight:900;line-height:1.05;margin-top:2px;display:flex;align-items:baseline;gap:6px}
+.ecb-num small{font-size:.8rem;font-weight:600;opacity:.8}
+.ecb-side{text-align:right;font-size:.7rem;opacity:.9;line-height:1.7;font-weight:600}
+.ecb-prog{height:8px;background:rgba(255,255,255,.22);border-radius:6px;margin-top:14px;overflow:hidden;position:relative}
+.ecb-prog i{display:block;height:100%;background:linear-gradient(90deg,#c8e6c9,#fff);border-radius:6px;transition:width .35s}
+.ecb-pct{font-size:.68rem;opacity:.9;margin-top:6px;font-weight:600;position:relative}
 
-.res-balde{border-radius:14px;padding:16px;margin-bottom:12px}
-.res-ya{background:var(--yab);border:2px solid var(--yas)}
-.res-ha{background:var(--hab);border:2px solid var(--has)}
-.rb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.rb-title{font-size:.9rem;font-weight:800}
-.rb-title-ya{color:var(--ya)}.rb-title-ha{color:var(--ha)}
-.rb-ec{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:10px;color:#fff}
-.rb-ec-ya{background:var(--ya)}.rb-ec-ha{background:var(--ha)}
+/* ── RESULT BALDE ── */
+.res-balde{background:#fff;border-radius:18px;padding:8px 16px;margin-bottom:12px;box-shadow:var(--sh);border:1px solid var(--line);position:relative}
+.res-ya{border-top:3px solid var(--ya)} .res-ha{border-top:3px solid var(--ha)}
+.balde-tag{display:inline-flex;align-items:center;gap:6px;font-size:.74rem;font-weight:800;padding:8px 0 4px;margin-bottom:2px}
+.balde-tag-ya{color:var(--ya)} .balde-tag-ha{color:var(--ha)}
 
-.fert-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.fert-row{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid var(--line)}
 .fert-row:last-child{border:none}
-.fert-nm{font-size:.84rem;font-weight:600}
-.fert-fml{font-size:.68rem;color:var(--gray);margin-top:1px}
-.fert-amt{font-size:1.1rem;font-weight:800;text-align:right}
-.fert-amt-ya{color:var(--ya)}.fert-amt-ha{color:var(--ha)}
-.fert-unit{font-size:.67rem;color:var(--gray)}
+.fert-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;box-shadow:0 0 0 3px rgba(0,0,0,.03)}
+.dot-ya{background:var(--ya)} .dot-ha{background:var(--ha)}
+.fert-main{flex:1;min-width:0}
+.fert-nm{font-size:.86rem;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:6px}
+.fert-fml{font-size:.66rem;color:var(--gray);margin-top:1px;font-weight:500}
+.tagm{font-size:.55rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px;padding:2px 6px;border-radius:6px;background:#eceff1;color:#78909c}
+.fert-bar{height:5px;background:#eef1ef;border-radius:3px;margin-top:7px;overflow:hidden}
+.fert-bar i{display:block;height:100%;border-radius:3px;transition:width .4s}
+.bar-ya{background:linear-gradient(90deg,var(--yas),var(--ya))}
+.bar-ha{background:linear-gradient(90deg,var(--has),var(--ha))}
+.fert-pill{font-size:1rem;font-weight:800;padding:7px 12px;border-radius:13px;white-space:nowrap;flex-shrink:0;letter-spacing:.2px}
+.pill-ya{background:var(--yab);color:var(--ya2)} .pill-ha{background:var(--hab);color:var(--ha2)}
+.fert-sub{font-size:.62rem;color:var(--gray);font-weight:600;display:block;text-align:right;margin-top:3px}
 
-.ec-badge{border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#1b5e20,var(--gl));color:#fff}
-.ecb-num{font-size:2rem;font-weight:900}
-.ecb-lbl{font-size:.75rem;opacity:.85}
-.ecb-sub{font-size:.7rem;opacity:.78;margin-top:4px}
+/* ── ALERTS ── */
+.alrt{border-radius:14px;padding:13px 15px;margin-bottom:11px;font-size:.82rem;line-height:1.5;display:flex;gap:9px;align-items:flex-start;box-shadow:var(--sh-sm)}
+.alrt .ai{flex-shrink:0;font-size:1rem}
+.alrt-w{background:#fff4e5;border:1px solid #ffe0b2;color:#7a4100}
+.alrt-i{background:var(--yab);border:1px solid #cfe3f7;color:#0d3b6e}
+.alrt-ok{background:var(--gbg);border:1px solid #c8e6c9;color:#1b5e20}
 
-.alrt{border-radius:10px;padding:11px 14px;margin-bottom:10px;font-size:.82rem;line-height:1.4}
-.alrt-w{background:var(--hab);border-left:4px solid var(--ha);color:#3e1052}
-.alrt-i{background:var(--yab);border-left:4px solid var(--yas);color:#0d3b6e}
-.alrt-ok{background:var(--gbg);border-left:4px solid var(--gl);color:#1b3a1c}
+/* ── STEPS ── */
+.steps{counter-reset:s;padding-left:4px}
+.step{counter-increment:s;padding:4px 4px 16px 34px;position:relative}
+.step:last-child{padding-bottom:2px}
+.step::before{content:counter(s);position:absolute;left:0;top:0;width:25px;height:25px;
+  background:linear-gradient(135deg,var(--g2),var(--gl));color:#fff;border-radius:9px;display:flex;
+  align-items:center;justify-content:center;font-weight:800;font-size:.76rem;box-shadow:0 3px 8px rgba(46,125,50,.3)}
+.step::after{content:"";position:absolute;left:12px;top:27px;bottom:4px;width:2px;background:var(--line)}
+.step:last-child::after{display:none}
+.step strong{color:var(--ink);font-size:.83rem;display:block;font-weight:800}
+.step p{font-size:.76rem;color:#556;margin-top:3px;line-height:1.5}
 
-.tab-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.tab{padding:7px 13px;border-radius:20px;border:2px solid #ddd;background:#fff;font-size:.76rem;font-weight:700;cursor:pointer;color:var(--gray)}
-.tab.on{background:var(--g);color:#fff;border-color:var(--g)}
+/* ── VOL ── */
+.vol-row{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+.vol-row .vl{font-size:.72rem;font-weight:700;color:var(--gray);width:54px}
+.vol-btn{width:36px;height:36px;border-radius:12px;border:1.5px solid #e3e8e4;background:#fff;font-size:1.2rem;
+  font-weight:700;cursor:pointer;color:var(--g);display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-sm)}
+.vol-btn:active{transform:scale(.94)}
+.vol-inp{width:90px;height:38px;border:1.5px solid #e3e8e4;border-radius:12px;text-align:center;font-size:1rem;
+  font-weight:800;color:var(--g);outline:none;background:#fbfcfb}
+.vol-inp:focus{border-color:var(--gl);background:#fff}
 
+.note{font-size:.75rem;background:#f4f7f4;border:1px solid var(--line);border-radius:13px;padding:12px 14px;line-height:1.55;margin-top:11px;color:#5a6b5e}
+.slbl{font-size:.7rem;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px;display:block}
+
+/* ── TABELA ── */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:0 0 18px 18px}
 .corr-tbl{width:100%;border-collapse:collapse;font-size:.74rem}
-.corr-tbl th{padding:7px 5px;font-size:.66rem;font-weight:700;color:#fff;text-align:center;white-space:nowrap}
-.th-ya{background:var(--ya)}.th-ha{background:var(--ha)}
-.corr-tbl td{padding:6px 4px;text-align:center;border-bottom:1px solid #f0f0f0;font-size:.74rem;white-space:nowrap}
-.td-d{font-weight:800;color:var(--g)}
+.corr-tbl th{padding:9px 6px;font-size:.64rem;font-weight:800;color:#fff;text-align:center;white-space:nowrap;position:sticky;top:0}
+.th-ya{background:var(--ya)} .th-ha{background:var(--ha)}
+.corr-tbl td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--line);font-size:.74rem;white-space:nowrap;font-weight:600}
+.td-d{font-weight:800;color:#fff}
+.td-d-ya{background:var(--ya)} .td-d-ha{background:var(--ha)}
 
-.steps{counter-reset:s}
-.step{counter-increment:s;padding:9px 12px 9px 28px;position:relative;border-left:3px solid var(--gbg);margin-bottom:6px;background:#fff;border-radius:0 10px 10px 0;margin-left:13px}
-.step::before{content:counter(s);position:absolute;left:-13px;top:9px;width:24px;height:24px;background:var(--g);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.75rem}
-.step strong{color:var(--g);font-size:.84rem;display:block}
-.step p{font-size:.76rem;color:#555;margin-top:3px;line-height:1.4}
-
-.vol-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.vol-btn{width:34px;height:34px;border-radius:50%;border:2px solid #ddd;background:#fff;font-size:1.1rem;font-weight:700;cursor:pointer;color:var(--gray);display:flex;align-items:center;justify-content:center}
-.vol-inp{width:84px;height:36px;border:2px solid #ddd;border-radius:10px;text-align:center;font-size:.95rem;font-weight:700;color:var(--g);outline:none}
-.vol-inp:focus{border-color:var(--gl)}
-.note{font-size:.76rem;color:var(--gray);background:#f5f7f6;border-radius:8px;padding:10px 12px;line-height:1.5;margin-top:10px}
-.slbl{font-size:.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin:14px 0 8px;display:block}
-
-/* comparar */
-.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.cmp-col{border-radius:14px;padding:12px;overflow:hidden}
-.cmp-ya{background:var(--yab);border:2px solid var(--yas)}
-.cmp-ha{background:var(--hab);border:2px solid var(--has)}
-.cmp-h{font-size:.82rem;font-weight:800;margin-bottom:8px;text-align:center}
-.cmp-h-ya{color:var(--ya)}.cmp-h-ha{color:var(--ha)}
-.cmp-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:.74rem;gap:4px}
-.cmp-row:last-child{border:none}
-.cmp-row .n{font-weight:600;flex:1}
-.cmp-row .v{font-weight:800;white-space:nowrap}
-.cmp-tot{margin-top:8px;padding-top:8px;border-top:2px solid rgba(0,0,0,.12);font-size:.78rem;font-weight:800;display:flex;justify-content:space-between}
+/* ── COMPARAR ── */
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.cmp-col{border-radius:18px;padding:13px 12px;box-shadow:var(--sh);background:#fff}
+.cmp-ya{border-top:3px solid var(--ya)} .cmp-ha{border-top:3px solid var(--ha)}
+.cmp-h{font-size:.8rem;font-weight:800;margin-bottom:10px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.cmp-h-ya{color:var(--ya)} .cmp-h-ha{color:var(--ha)}
+.cmp-h small{font-size:.6rem;font-weight:600;color:var(--gray)}
+.cmp-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:.72rem;gap:4px}
+.cmp-row:last-of-type{border:none}
+.cmp-row .n{font-weight:600;flex:1;color:#445}
+.cmp-row .v{font-weight:800;white-space:nowrap;color:var(--ink)}
+.cmp-tot{margin-top:10px;padding:10px 11px;border-radius:12px;font-size:.78rem;font-weight:800;display:flex;justify-content:space-between;align-items:center}
+.cmp-tot-ya{background:var(--yab);color:var(--ya2)} .cmp-tot-ha{background:var(--hab);color:var(--ha2)}
+.cmp-frac{font-size:.64rem;color:var(--gray);font-weight:700;text-align:center;margin-top:6px}
 </style>
 </head>
 <body>
@@ -123,17 +185,13 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-seri
   </div>
   <div id="content">
 
-    <!-- ═══ ABA YARA ════════════════════════════════════════════ -->
     <div class="screen active" id="s-yara"></div>
-
-    <!-- ═══ ABA HAIFA ═══════════════════════════════════════════ -->
     <div class="screen" id="s-haifa"></div>
 
-    <!-- ═══ ABA COMPARAR ════════════════════════════════════════ -->
+    <!-- COMPARAR -->
     <div class="screen" id="s-cmp">
       <div class="card">
-        <div class="card-ttl">⚖️ Comparar Yara × Haifa</div>
-        <div class="note" style="margin-bottom:14px">Mesmo volume e mesmo EC alvo nas duas receitas. Veja lado a lado as doses e a massa total de cada marca.</div>
+        <div class="card-ttl"><span class="ci">⚖️</span>Comparar Yara × Haifa</div>
         <div class="inp-grid">
           <div class="inp-g"><label>💧 EC água</label><input type="number" id="cmp-agua" value="0.0" step="0.01" min="0" oninput="compare()"><div class="unit">mS/cm</div></div>
           <div class="inp-g"><label>🎯 EC alvo</label><input type="number" id="cmp-alvo" value="1.41" step="0.01" min="0.1" oninput="compare()"><div class="unit">mS/cm</div></div>
@@ -149,31 +207,30 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-seri
       <div id="cmp-out"></div>
     </div>
 
-    <!-- ═══ ABA SOBRE ═══════════════════════════════════════════ -->
+    <!-- SOBRE -->
     <div class="screen" id="s-info">
       <div class="card">
-        <div style="font-size:1rem;font-weight:700;color:var(--g);margin-bottom:12px">🥬 NFT Alface — v2.0</div>
-        <div class="note" style="margin-bottom:14px">App de cálculo de solução nutritiva para alface em NFT. Duas receitas de marcas diferentes, calculadas direto pelas planilhas laminadas da Leslie. Cálculo: <strong>dose = g(3000L) × ΔEC ÷ EC_base × (volume ÷ 3000)</strong>, onde ΔEC = EC alvo − EC da água.</div>
-        <span class="slbl">🔵 Alface Yara (EC base 1,41)</span>
-        <div style="font-size:.78rem;line-height:1.8;margin-bottom:12px">
-          Calcinit 907 · Yara Rega NK 528 · Krista-K 45 1296 · Krista-MAG 350 · Krista-MKP 285 · Rexolin Q48 67 · Rexolin CXK 39 <span style="color:var(--gray)">(g/3000 L na receita cheia)</span>
+        <div class="card-ttl"><span class="ci">🥬</span>NFT Alface — v2.1</div>
+        <div class="note" style="margin-bottom:14px">Cálculo de solução nutritiva para alface em NFT. Duas receitas de marcas diferentes, lidas direto das planilhas laminadas. <strong>dose = g(3000L) × ΔEC ÷ EC_base × (volume ÷ 3000)</strong>, com ΔEC = EC alvo − EC da água.</div>
+        <span class="slbl">🔵 Alface Yara · EC base 1,41</span>
+        <div style="font-size:.78rem;line-height:1.8;margin-bottom:12px;color:#445">
+          Calcinit 907 · Yara Rega NK 528 · Krista-K 45 1296 · Krista-MAG 350 · Krista-MKP 285 · Rexolin Q48 67 · Rexolin CXK 39 <span style="color:var(--gray)">(g/3000 L, receita cheia)</span>
         </div>
-        <span class="slbl">🟣 Alface Haifa (EC base ≈1,30)</span>
-        <div style="font-size:.78rem;line-height:1.8;margin-bottom:12px">
+        <span class="slbl">🟣 Alface Haifa · EC base ≈1,30</span>
+        <div style="font-size:.78rem;line-height:1.8;margin-bottom:12px;color:#445">
           <strong>Balde A:</strong> Nit. Cálcio 1260 · Móvel Ca 60 · Fetri Combi 45 · Basafer 57<br>
           <strong>Balde B:</strong> NPK 13-02-44 780 · Sulf. Magnésio 690 · Nitr. Magnésio 180 · MKP 360
         </div>
         <span class="slbl">Observações</span>
-        <div style="font-size:.74rem;color:var(--gray);line-height:1.7">
-          • Sempre dissolver o nitrato de cálcio (Calcinit / Nit. Cálcio) <strong>separado</strong> dos fosfatos.<br>
-          • Na receita Haifa, diluir o Balde A no reservatório antes do Balde B.<br>
-          • EC base = EC que a receita cheia (3000 L) gera, lido das próprias planilhas.<br>
+        <div style="font-size:.74rem;color:var(--gray);line-height:1.75">
+          • Dissolver o nitrato de cálcio <strong>separado</strong> dos fosfatos.<br>
+          • Na Haifa, diluir o Balde A no reservatório antes do Balde B.<br>
           • pH alvo: 5,8–6,2. Em breve: histórico de preparo e custo por marca.
         </div>
       </div>
     </div>
 
-  </div><!-- /content -->
+  </div>
 
   <div id="bottomnav">
     <button class="bnbtn on-ya" id="bn-yara" onclick="goTo('yara')"><span class="ico">🔵</span><span>Yara</span></button>
@@ -184,12 +241,7 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-seri
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════════════════════════════
-//  DADOS — transcritos das planilhas laminadas (g por 3000 L na receita cheia)
-//  EC_base = EC que a receita cheia gera (lido da própria planilha)
-// ══════════════════════════════════════════════════════════════════════════════
 const REF_VOL = 3000;
-
 const RECIPES = {
   yara: {
     nome:'Alface Yara', tag:'ya',
@@ -228,31 +280,27 @@ const RECIPES = {
   }
 };
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  HELPERS
-// ══════════════════════════════════════════════════════════════════════════════
+// ── HELPERS ──
 function fmtG(g){
   if(g==null||isNaN(g)) return '—';
   if(g<0.001) return (g*1e6).toFixed(0)+' µg';
-  if(g<1)     return (g*1000).toFixed(1)+' mg';
+  if(g<1)     return (g*1000).toFixed(0)+' mg';
   if(g>=1000) return (g/1000).toFixed(2)+' kg';
-  return g.toFixed(1)+' g';
+  return g.toFixed(0)+' g';
 }
 function nf(v){ return Number(v).toLocaleString('pt-BR'); }
-function val(id, dft){ const e=document.getElementById(id); const v=parseFloat(e&&e.value); return isNaN(v)?dft:v; }
+function val(id,dft){ const e=document.getElementById(id); const v=parseFloat(e&&e.value); return isNaN(v)?dft:v; }
 function allFerts(rec){ return rec.baldes.flatMap(b=>b.ferts); }
 function icon(rec){ return rec.tag==='ya'?'🔵':'🟣'; }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  MONTA A ABA DE UMA RECEITA (Yara / Haifa)
-// ══════════════════════════════════════════════════════════════════════════════
+// ── ABA DE RECEITA ──
 function buildRecipeScreen(rid){
-  const rec = RECIPES[rid], t = rec.tag;
-  document.getElementById('s-'+rid).innerHTML = `
+  const rec=RECIPES[rid], t=rec.tag;
+  document.getElementById('s-'+rid).innerHTML=`
     <div class="rec-hdr rec-hdr-${t}">
       <div class="rh-t">${icon(rec)} ${rec.nome}</div>
       <div class="rh-s">${rec.sub}</div>
-      <div class="rh-ec">EC base da receita cheia: ${rec.ecBase.toFixed(2)} mS/cm · 3000 L${rec.baldes.length>1?' · 2 baldes':''}</div>
+      <div class="rh-ec">⚡ EC base ${rec.ecBase.toFixed(2)} mS/cm · 3000 L${rec.baldes.length>1?' · 2 baldes':''}</div>
     </div>
     <div class="tab-row">
       <button class="tab on" id="t-${rid}-calc" onclick="swTab('${rid}','calc')">⚗️ Calcular</button>
@@ -263,7 +311,7 @@ function buildRecipeScreen(rid){
 
     <div id="p-${rid}-calc">
       <div class="card">
-        <div class="card-ttl">⚗️ Calcular doses</div>
+        <div class="card-ttl"><span class="ci">⚗️</span>Calcular doses</div>
         <div class="inp-grid">
           <div class="inp-g"><label>💧 EC água</label><input type="number" id="${rid}-agua" value="0.0" step="0.01" min="0" oninput="calcRec('${rid}')"><div class="unit">mS/cm</div></div>
           <div class="inp-g"><label>🎯 EC alvo</label><input type="number" id="${rid}-alvo" value="${rec.ecAlvo}" step="0.01" min="0.1" oninput="calcRec('${rid}')"><div class="unit">mS/cm</div></div>
@@ -281,207 +329,187 @@ function buildRecipeScreen(rid){
 
     <div id="p-${rid}-rec" style="display:none">
       <div class="card">
-        <div class="card-ttl">📋 Receita cheia (EC ${rec.ecBase.toFixed(2)})</div>
-        <div class="vol-row">
-          <span style="font-size:.78rem;font-weight:700;color:var(--gray);width:60px">Volume</span>
-          <button class="vol-btn" onclick="adjRecVol('${rid}','rec',-100)">−</button>
-          <input class="vol-inp" id="${rid}-rvol" type="number" value="3000" oninput="recRec('${rid}')">
-          <span style="font-size:.78rem;color:var(--gray)">L</span>
-        </div>
-        <div id="${rid}-rec-out"></div>
+        <div class="card-ttl"><span class="ci">📋</span>Receita cheia · EC ${rec.ecBase.toFixed(2)}</div>
+        <div class="vol-row"><span class="vl">Volume</span><button class="vol-btn" onclick="adjRecVol('${rid}','rec',-100)">−</button>
+          <input class="vol-inp" id="${rid}-rvol" type="number" value="3000" oninput="recRec('${rid}')"><span style="font-size:.78rem;color:var(--gray)">L</span></div>
       </div>
-      <div class="card"><div class="card-ttl">📝 Passo a passo</div><div class="steps" id="${rid}-rec-steps"></div></div>
+      <div id="${rid}-rec-out"></div>
+      <div class="card"><div class="card-ttl"><span class="ci">📝</span>Passo a passo</div><div class="steps" id="${rid}-rec-steps"></div></div>
     </div>
 
     <div id="p-${rid}-corr" style="display:none">
       <div class="card">
-        <div class="card-ttl">⚡ Correção de EC</div>
-        <div class="note" style="margin-bottom:14px">EC do tanque desviou? Informe o EC atual e o desejado para saber quanto adicionar — ou quantos litros de água diluir.</div>
+        <div class="card-ttl"><span class="ci">⚡</span>Correção de EC</div>
+        <div class="note" style="margin:0 0 14px">EC do tanque desviou? Informe o atual e o desejado para saber quanto adicionar — ou quantos litros de água diluir.</div>
         <div class="inp-grid g2">
           <div class="inp-g"><label>EC atual</label><input type="number" id="${rid}-cAt" value="1.0" step="0.01" oninput="corrRec('${rid}')"><div class="unit">mS/cm</div></div>
           <div class="inp-g"><label>EC desejado</label><input type="number" id="${rid}-cDs" value="${rec.ecAlvo}" step="0.01" oninput="corrRec('${rid}')"><div class="unit">mS/cm</div></div>
         </div>
-        <div class="vol-row">
-          <span style="font-size:.78rem;font-weight:700;color:var(--gray);width:60px">Volume</span>
-          <button class="vol-btn" onclick="adjRecVol('${rid}','corr',-100)">−</button>
-          <input class="vol-inp" id="${rid}-cvol" type="number" value="3000" oninput="corrRec('${rid}')">
-          <span style="font-size:.78rem;color:var(--gray)">L</span>
-        </div>
-        <div id="${rid}-corr-out"></div>
+        <div class="vol-row"><span class="vl">Volume</span><button class="vol-btn" onclick="adjRecVol('${rid}','corr',-100)">−</button>
+          <input class="vol-inp" id="${rid}-cvol" type="number" value="3000" oninput="corrRec('${rid}')"><span style="font-size:.78rem;color:var(--gray)">L</span></div>
       </div>
+      <div id="${rid}-corr-out"></div>
     </div>
 
     <div id="p-${rid}-tab" style="display:none">
       <div class="card" style="padding:0;overflow:hidden">
-        <div style="padding:14px 16px 4px;font-size:.78rem;font-weight:700;color:var(--gray)">Gramas a adicionar em <span id="${rid}-tvol-lbl">3000</span> L por ΔEC (mS/cm):</div>
-        <div class="vol-row" style="padding:6px 16px 10px;margin:0">
-          <button class="vol-btn" onclick="adjRecVol('${rid}','tab',-100)">−</button>
-          <input class="vol-inp" id="${rid}-tvol" type="number" value="3000" oninput="tabRec('${rid}')">
-          <span style="font-size:.78rem;color:var(--gray)">L</span>
-        </div>
-        <div style="overflow-x:auto" id="${rid}-tab-out"></div>
+        <div style="padding:16px 16px 6px;font-size:.8rem;font-weight:800">📊 Gramas em <span id="${rid}-tvol-lbl">3000</span> L por ΔEC</div>
+        <div class="vol-row" style="padding:0 16px 12px;margin:0"><button class="vol-btn" onclick="adjRecVol('${rid}','tab',-100)">−</button>
+          <input class="vol-inp" id="${rid}-tvol" type="number" value="3000" oninput="tabRec('${rid}')"><span style="font-size:.78rem;color:var(--gray)">L</span></div>
+        <div class="tbl-wrap" id="${rid}-tab-out"></div>
       </div>
     </div>`;
 }
 
-// ── Linha de fertilizante ──
-function fertRowHTML(f, t, vol){
-  const mgL = vol ? (f._g/vol*1000).toFixed(2)+' mg/L' : '';
-  return `<div class="fert-row"><div><div class="fert-nm">${f.nome}</div><div class="fert-fml">${f.fml}</div></div>
-    <div style="text-align:right"><div class="fert-amt fert-amt-${t}">${fmtG(f._g)}</div><div class="fert-unit">${mgL}</div></div></div>`;
+// ── LINHA DE FERTILIZANTE (com barra de proporção) ──
+function fertRowHTML(f,t,vol,maxG){
+  const pct = maxG ? Math.max(7, Math.round(f._g/maxG*100)) : 0;
+  const bar = maxG ? `<div class="fert-bar"><i class="bar-${t}" style="width:${pct}%"></i></div>` : '';
+  const micro = f.micro ? '<span class="tagm">micro</span>' : '';
+  const sub = vol ? `<div class="fert-sub">${(f._g/vol*1000).toFixed(1)} mg/L</div>` : '';
+  return `<div class="fert-row">
+    <span class="fert-dot dot-${t}"></span>
+    <div class="fert-main">
+      <div class="fert-nm">${f.nome}${micro}</div>
+      <div class="fert-fml">${f.fml}</div>${bar}
+    </div>
+    <div><span class="fert-pill pill-${t}">${fmtG(f._g)}</span>${sub}</div>
+  </div>`;
 }
-
-// ── Blocos de doses por balde (frac = fração da receita cheia; vol = p/ mg/L) ──
-function baldeBlocksHTML(rec, frac, vol){
-  const t = rec.tag, mostraBalde = rec.baldes.length>1;
+function baldeBlocksHTML(rec,frac,vol){
+  const t=rec.tag, multi=rec.baldes.length>1;
   return rec.baldes.map(b=>{
-    const rows = b.ferts.map(f=>fertRowHTML({...f,_g:f.g*frac*(vol/REF_VOL)}, t, vol)).join('');
-    const lbl  = mostraBalde ? `<div class="rb-head"><span class="rb-title rb-title-${t}">${icon(rec)} ${b.nome}</span></div>` : '';
-    return `<div class="res-balde res-${t}">${lbl}${rows}</div>`;
+    const doses=b.ferts.map(f=>({...f,_g:f.g*frac*(vol/REF_VOL)}));
+    const maxG=Math.max(...doses.map(d=>d._g),1e-9);
+    const lbl=multi?`<div class="balde-tag balde-tag-${t}">${icon(rec)} ${b.nome}</div>`:'';
+    return `<div class="res-balde res-${t}">${lbl}${doses.map(f=>fertRowHTML(f,t,vol,maxG)).join('')}</div>`;
   }).join('');
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  CALCULAR
-// ══════════════════════════════════════════════════════════════════════════════
+// ── CALCULAR ──
 function calcRec(rid){
-  const rec = RECIPES[rid], t = rec.tag;
-  const agua = val(rid+'-agua',0), alvo = val(rid+'-alvo',rec.ecAlvo), vol = Math.max(1,val(rid+'-vol',3000));
-  const delta = alvo - agua, out = document.getElementById(rid+'-calc-out');
-
+  const rec=RECIPES[rid], t=rec.tag;
+  const agua=val(rid+'-agua',0), alvo=val(rid+'-alvo',rec.ecAlvo), vol=Math.max(1,val(rid+'-vol',3000));
+  const delta=alvo-agua, out=document.getElementById(rid+'-calc-out');
   if(delta<=0){
-    const litros = (vol*(agua/alvo-1)).toFixed(0);
-    out.innerHTML = `<div class="alrt alrt-w">⚠️ EC da água (${agua.toFixed(2)}) ≥ EC alvo (${alvo.toFixed(2)}). Não adicione fertilizante.<br><br>💧 Para baixar até ${alvo.toFixed(2)} em ${nf(vol)} L, adicione <strong>${nf(litros)} L de água pura</strong>.</div>`;
+    const litros=(vol*(agua/alvo-1)).toFixed(0);
+    out.innerHTML=`<div class="alrt alrt-w"><span class="ai">⚠️</span><div>EC da água (${agua.toFixed(2)}) ≥ EC alvo (${alvo.toFixed(2)}). Não adicione fertilizante.<br>💧 Para baixar até ${alvo.toFixed(2)} em ${nf(vol)} L, adicione <strong>${nf(litros)} L de água pura</strong>.</div></div>`;
     return;
   }
-  const frac = delta / rec.ecBase;
-  const total = allFerts(rec).reduce((s,f)=>s+f.g*frac*(vol/REF_VOL),0);
-
-  let html = `<div class="ec-badge">
-      <div><div class="ecb-lbl">EC final da solução</div><div class="ecb-num">${alvo.toFixed(2)}</div>
-      <div class="ecb-sub">💧 água ${agua.toFixed(2)} + ferts ${delta.toFixed(2)}</div></div>
-      <div style="text-align:right"><div style="font-size:.72rem;opacity:.8">mS/cm</div>
-      <div style="font-size:.72rem;opacity:.78;margin-top:8px">${(frac*100).toFixed(0)}% da<br>receita cheia</div></div></div>`;
-
-  if(frac>1.15) html += `<div class="alrt alrt-w">⚠️ Fração ${(frac*100).toFixed(0)}% — acima da receita cheia. Confira o EC alvo (máx. útil ≈ ${(rec.ecBase+agua).toFixed(2)}).</div>`;
-
-  html += baldeBlocksHTML(rec, frac, vol);
-  html += `<div class="card"><div class="card-ttl">📝 Ordem de preparo</div><div class="steps">${stepsHTML(rec,frac,vol,agua,alvo)}</div></div>`;
-  out.innerHTML = html;
+  const frac=delta/rec.ecBase, pctBar=Math.min(frac,1)*100;
+  let html=`<div class="ec-badge">
+    <div class="ecb-top">
+      <div><div class="ecb-lbl">EC final da solução</div><div class="ecb-num">${alvo.toFixed(2)}<small>mS/cm</small></div></div>
+      <div class="ecb-side">💧 água ${agua.toFixed(2)}<br>🧪 ferts +${delta.toFixed(2)}</div>
+    </div>
+    <div class="ecb-prog"><i style="width:${pctBar}%"></i></div>
+    <div class="ecb-pct">${(frac*100).toFixed(0)}% da receita cheia</div>
+  </div>`;
+  if(frac>1.15) html+=`<div class="alrt alrt-w"><span class="ai">⚠️</span><div>Fração ${(frac*100).toFixed(0)}% — acima da receita cheia. Confira o EC alvo (máx. útil ≈ ${(rec.ecBase+agua).toFixed(2)}).</div></div>`;
+  html+=baldeBlocksHTML(rec,frac,vol);
+  html+=`<div class="card"><div class="card-ttl"><span class="ci">📝</span>Ordem de preparo</div><div class="steps">${stepsHTML(rec,frac,vol,agua,alvo)}</div></div>`;
+  out.innerHTML=html;
 }
-
-function stepsHTML(rec, frac, vol, agua, alvo){
-  const two = rec.baldes.length>1, dose = f=>fmtG(f.g*frac*(vol/REF_VOL));
-  let s = `<div class="step"><strong>Meça a água</strong><p>Confirme EC (${agua.toFixed(2)} mS/cm) e pH (ideal 5,5–6,5) antes de adicionar fertilizante.</p></div>`;
+function stepsHTML(rec,frac,vol,agua,alvo){
+  const two=rec.baldes.length>1, dose=f=>fmtG(f.g*frac*(vol/REF_VOL));
+  let s=`<div class="step"><strong>Meça a água</strong><p>Confirme EC (${agua.toFixed(2)} mS/cm) e pH (5,5–6,5) antes de adicionar fertilizante.</p></div>`;
   rec.baldes.forEach(b=>{
-    const first  = b.ferts.find(f=>f.first);
-    const macros = b.ferts.filter(f=>!f.first&&!f.micro);
-    const micros = b.ferts.filter(f=>f.micro);
-    const bn = two? ` (${b.nome})`:'';
-    if(first) s += `<div class="step"><strong>Cálcio primeiro${bn} — separado</strong><p>Dissolva <strong>${dose(first)}</strong> de ${first.nome} num recipiente à parte. Nunca misture com fosfatos concentrados.</p></div>`;
-    if(macros.length) s += `<div class="step"><strong>Macronutrientes${bn}</strong><p>${macros.map(f=>`${f.nome}: <strong>${dose(f)}</strong>`).join(' · ')}</p></div>`;
-    if(micros.length) s += `<div class="step"><strong>Micronutrientes${bn}</strong><p>${micros.map(f=>`${f.nome}: <strong>${dose(f)}</strong>`).join(' · ')}. Dissolva em ~1 L de água morna antes.</p></div>`;
+    const first=b.ferts.find(f=>f.first), macros=b.ferts.filter(f=>!f.first&&!f.micro), micros=b.ferts.filter(f=>f.micro);
+    const bn=two?` (${b.nome})`:'';
+    if(first) s+=`<div class="step"><strong>Cálcio primeiro${bn} — separado</strong><p>Dissolva <strong>${dose(first)}</strong> de ${first.nome} à parte. Nunca misture com fosfatos concentrados.</p></div>`;
+    if(macros.length) s+=`<div class="step"><strong>Macronutrientes${bn}</strong><p>${macros.map(f=>`${f.nome}: <strong>${dose(f)}</strong>`).join(' · ')}</p></div>`;
+    if(micros.length) s+=`<div class="step"><strong>Micronutrientes${bn}</strong><p>${micros.map(f=>`${f.nome}: <strong>${dose(f)}</strong>`).join(' · ')}. Dissolva em ~1 L de água morna antes.</p></div>`;
   });
   if(two){
-    s += `<div class="step"><strong>Balde A no reservatório primeiro</strong><p>Despeje todo o Balde A nos ${nf(vol)} L e misture bem.</p></div>`;
-    s += `<div class="step"><strong>Depois o Balde B</strong><p>Só adicione o Balde B com o A já diluído. Misture bem.</p></div>`;
+    s+=`<div class="step"><strong>Balde A no reservatório primeiro</strong><p>Despeje todo o Balde A nos ${nf(vol)} L e misture bem.</p></div>`;
+    s+=`<div class="step"><strong>Depois o Balde B</strong><p>Só adicione o Balde B com o A já diluído. Misture bem.</p></div>`;
   } else {
-    s += `<div class="step"><strong>Adicione ao reservatório</strong><p>Despeje no reservatório de ${nf(vol)} L e misture bem.</p></div>`;
+    s+=`<div class="step"><strong>Adicione ao reservatório</strong><p>Despeje nos ${nf(vol)} L e misture bem.</p></div>`;
   }
-  s += `<div class="step"><strong>Complete e ajuste</strong><p>Complete até ${nf(vol)} L. Ajuste pH para 5,8–6,2. EC esperado: <strong>${alvo.toFixed(2)} mS/cm</strong>.</p></div>`;
+  s+=`<div class="step"><strong>Complete e ajuste</strong><p>Complete até ${nf(vol)} L. pH 5,8–6,2. EC esperado: <strong>${alvo.toFixed(2)} mS/cm</strong>.</p></div>`;
   return s;
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  RECEITA CHEIA
-// ══════════════════════════════════════════════════════════════════════════════
+// ── RECEITA CHEIA ──
 function recRec(rid){
-  const rec = RECIPES[rid], vol = Math.max(1,val(rid+'-rvol',3000)), frac = vol/REF_VOL;
-  document.getElementById(rid+'-rec-out').innerHTML = baldeBlocksHTML(rec, 1, vol); // frac de EC = 1 (cheia); escala por volume dentro
-  const dose = f=>fmtG(f.g*frac);
-  let s='';
+  const rec=RECIPES[rid], vol=Math.max(1,val(rid+'-rvol',3000)), frac=vol/REF_VOL;
+  document.getElementById(rid+'-rec-out').innerHTML=baldeBlocksHTML(rec,1,vol);
+  const dose=f=>fmtG(f.g*frac); let s='';
   rec.baldes.forEach(b=>{
     const first=b.ferts.find(f=>f.first), macros=b.ferts.filter(f=>!f.first&&!f.micro), micros=b.ferts.filter(f=>f.micro);
     const bn=rec.baldes.length>1?` (${b.nome})`:'';
-    if(first) s+=`<div class="step"><strong>Cálcio primeiro${bn} — separado</strong><p>${first.nome}: <strong>${dose(first)}</strong>. Dissolva à parte dos fosfatos.</p></div>`;
+    if(first) s+=`<div class="step"><strong>Cálcio primeiro${bn} — separado</strong><p>${first.nome}: <strong>${dose(first)}</strong>. À parte dos fosfatos.</p></div>`;
     if(macros.length) s+=`<div class="step"><strong>Macros${bn}</strong><p>${macros.map(f=>`${f.nome}: <strong>${dose(f)}</strong>`).join(' · ')}</p></div>`;
     if(micros.length) s+=`<div class="step"><strong>Micros${bn}</strong><p>${micros.map(f=>`${f.nome}: <strong>${dose(f)}</strong>`).join(' · ')}. Dissolva em água morna.</p></div>`;
   });
-  s+=`<div class="step"><strong>Diluir e ajustar</strong><p>Complete até ${nf(vol)} L. EC ≈ ${rec.ecBase.toFixed(2)} mS/cm (sem somar o EC da água). pH 5,8–6,2.</p></div>`;
+  s+=`<div class="step"><strong>Diluir e ajustar</strong><p>Complete até ${nf(vol)} L. EC ≈ ${rec.ecBase.toFixed(2)} mS/cm (sem o EC da água). pH 5,8–6,2.</p></div>`;
   document.getElementById(rid+'-rec-steps').innerHTML=s;
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  CORREÇÃO
-// ══════════════════════════════════════════════════════════════════════════════
+// ── CORREÇÃO ──
 function corrRec(rid){
   const rec=RECIPES[rid], t=rec.tag;
   const at=val(rid+'-cAt',0), ds=val(rid+'-cDs',rec.ecAlvo), vol=Math.max(1,val(rid+'-cvol',3000));
   const out=document.getElementById(rid+'-corr-out'), delta=ds-at;
-  if(Math.abs(delta)<0.005){ out.innerHTML='<div class="alrt alrt-ok">✅ EC já no valor desejado.</div>'; return; }
+  if(Math.abs(delta)<0.005){ out.innerHTML='<div class="alrt alrt-ok"><span class="ai">✅</span><div>EC já no valor desejado.</div></div>'; return; }
   if(delta<0){
     const l=(vol*(at/ds-1)).toFixed(0);
-    out.innerHTML=`<div class="alrt alrt-w">💧 Diluir: adicione <strong>${nf(l)} L de água pura</strong>.<br><small>${nf(vol)} L × (${at.toFixed(2)}/${ds.toFixed(2)} − 1)</small></div>`;
+    out.innerHTML=`<div class="alrt alrt-w"><span class="ai">💧</span><div>Diluir: adicione <strong>${nf(l)} L de água pura</strong>.<br><small>${nf(vol)} L × (${at.toFixed(2)}/${ds.toFixed(2)} − 1)</small></div></div>`;
     return;
   }
   const frac=delta/rec.ecBase;
+  const doses=allFerts(rec).map(f=>({...f,_g:f.g*frac*(vol/REF_VOL)}));
+  const maxG=Math.max(...doses.map(d=>d._g),1e-9);
   out.innerHTML=`<div class="res-balde res-${t}">
-    <div class="rb-head"><span class="rb-title rb-title-${t}">Adicionar — ${nf(vol)} L</span><span class="rb-ec rb-ec-${t}">+${delta.toFixed(2)} mS/cm</span></div>
-    ${allFerts(rec).map(f=>fertRowHTML({...f,_g:f.g*frac*(vol/REF_VOL)}, t, 0)).join('')}
+    <div class="balde-tag balde-tag-${t}" style="display:flex;justify-content:space-between;width:100%">➕ Adicionar — ${nf(vol)} L<span class="fert-pill pill-${t}">+${delta.toFixed(2)} mS/cm</span></div>
+    ${doses.map(f=>fertRowHTML(f,t,0,maxG)).join('')}
   </div>`;
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  TABELA DE REFERÊNCIA (ΔEC 0,1 → 1,0)
-// ══════════════════════════════════════════════════════════════════════════════
+// ── TABELA ──
 function tabRec(rid){
   const rec=RECIPES[rid], t=rec.tag, vol=Math.max(1,val(rid+'-tvol',3000));
   document.getElementById(rid+'-tvol-lbl').textContent=nf(vol);
   const ferts=allFerts(rec), deltas=[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0];
   const th=`<th class="th-${t}">ΔEC</th>`+ferts.map(f=>`<th class="th-${t}">${f.nome.split(' ')[0]}</th>`).join('');
   const rows=deltas.map((d,i)=>{
-    const bg=i%2?'#fff':'#fafafa', frac=d/rec.ecBase;
-    let c=`<td class="td-d" style="background:${bg}">${d.toFixed(1)}</td>`;
+    const bg=i%2?'#fff':'#f7faf7', frac=d/rec.ecBase;
+    let c=`<td class="td-d td-d-${t}">${d.toFixed(1)}</td>`;
     ferts.forEach(f=>{ c+=`<td style="background:${bg}">${fmtG(f.g*frac*(vol/REF_VOL))}</td>`; });
     return `<tr>${c}</tr>`;
   }).join('');
   document.getElementById(rid+'-tab-out').innerHTML=`<table class="corr-tbl"><thead><tr>${th}</tr></thead><tbody>${rows}</tbody></table>
-    <div style="padding:10px 14px;font-size:.66rem;color:var(--gray)">EC base ${rec.nome}: ${rec.ecBase.toFixed(3)} mS/cm (receita cheia em 3000 L).</div>`;
+    <div style="padding:10px 14px;font-size:.64rem;color:var(--gray)">EC base ${rec.nome}: ${rec.ecBase.toFixed(3)} mS/cm (receita cheia em 3000 L).</div>`;
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  COMPARAR
-// ══════════════════════════════════════════════════════════════════════════════
+// ── COMPARAR ──
 function cmpVol(v){ document.getElementById('cmp-vol').value=v; document.querySelectorAll('#s-cmp .qbtn').forEach(b=>b.classList.toggle('on',b.textContent===v+'L')); compare(); }
 function compare(){
   const agua=val('cmp-agua',0), alvo=val('cmp-alvo',1.41), vol=Math.max(1,val('cmp-vol',3000));
   const delta=alvo-agua, out=document.getElementById('cmp-out');
-  if(delta<=0){ out.innerHTML='<div class="alrt alrt-w">⚠️ EC alvo deve ser maior que o EC da água.</div>'; return; }
+  if(delta<=0){ out.innerHTML='<div class="alrt alrt-w"><span class="ai">⚠️</span><div>EC alvo deve ser maior que o EC da água.</div></div>'; return; }
   function col(rid){
-    const rec=RECIPES[rid], frac=delta/rec.ecBase, ferts=allFerts(rec);
-    const rows=ferts.map(f=>{const g=f.g*frac*(vol/REF_VOL);return `<div class="cmp-row"><span class="n">${f.nome}</span><span class="v">${fmtG(g)}</span></div>`;}).join('');
+    const rec=RECIPES[rid], t=rec.tag, frac=delta/rec.ecBase, ferts=allFerts(rec);
+    const rows=ferts.map(f=>`<div class="cmp-row"><span class="n">${f.nome}</span><span class="v">${fmtG(f.g*frac*(vol/REF_VOL))}</span></div>`).join('');
     const tot=ferts.reduce((s,f)=>s+f.g*frac*(vol/REF_VOL),0);
-    const aviso = frac>1.15?' ⚠️':'';
-    return `<div class="cmp-col cmp-${rec.tag}">
-      <div class="cmp-h cmp-h-${rec.tag}">${icon(rec)} ${rec.nome}</div>
+    return `<div class="cmp-col cmp-${t}">
+      <div class="cmp-h cmp-h-${t}">${icon(rec)} ${rec.nome}<small>EC base ${rec.ecBase.toFixed(2)}</small></div>
       ${rows}
-      <div class="cmp-tot"><span>Total${aviso}</span><span>${fmtG(tot)}</span></div>
-      <div class="cmp-tot" style="border:none;font-size:.7rem;color:var(--gray);font-weight:600"><span>fração</span><span>${(frac*100).toFixed(0)}%</span></div>
+      <div class="cmp-tot cmp-tot-${t}"><span>Total</span><span>${fmtG(tot)}</span></div>
+      <div class="cmp-frac">${(frac*100).toFixed(0)}% da receita${frac>1.15?' ⚠️':''}</div>
     </div>`;
   }
-  out.innerHTML=`<div class="card" style="padding:12px"><div class="cmp-grid">${col('yara')}${col('haifa')}</div>
-    <div class="note" style="margin-top:12px">Para ${nf(vol)} L mirando EC ${alvo.toFixed(2)} (água ${agua.toFixed(2)}). As duas receitas chegam ao mesmo EC; a diferença está em quais adubos e quanta massa cada marca exige. Custo por marca chega na próxima versão.</div></div>`;
+  out.innerHTML=`<div class="cmp-grid">${col('yara')}${col('haifa')}</div>
+    <div class="note">Para ${nf(vol)} L mirando EC ${alvo.toFixed(2)} (água ${agua.toFixed(2)}). As duas chegam ao mesmo EC; a diferença está em quais adubos e quanta massa cada marca exige. Custo por marca chega na próxima versão.</div>`;
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  NAVEGAÇÃO
-// ══════════════════════════════════════════════════════════════════════════════
+// ── NAVEGAÇÃO ──
 const LBL={yara:'Yara',haifa:'Haifa',cmp:'Comparar',info:'Sobre'};
 function goTo(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('s-'+id).classList.add('active');
   document.querySelectorAll('.bnbtn').forEach(b=>b.className='bnbtn');
-  const onCls = id==='yara'?'on-ya':id==='haifa'?'on-ha':'on-g';
+  const onCls=id==='yara'?'on-ya':id==='haifa'?'on-ha':'on-g';
   document.getElementById('bn-'+id).classList.add(onCls);
   document.getElementById('scrLbl').textContent=LBL[id];
   document.getElementById('content').scrollTop=0;
@@ -501,12 +529,9 @@ function adjRecVol(rid,which,d){
   if(which==='rec')recRec(rid); else if(which==='corr')corrRec(rid); else if(which==='tab')tabRec(rid);
 }
 
-// ══════════════════════════════════════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════════════════════════════════════
+// ── INIT ──
 window.onload=function(){
-  buildRecipeScreen('yara');
-  buildRecipeScreen('haifa');
+  buildRecipeScreen('yara'); buildRecipeScreen('haifa');
   ['yara','haifa'].forEach(rid=>{ calcRec(rid); recRec(rid); corrRec(rid); tabRec(rid); });
   compare();
 };
