@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>NFT Alface</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-serif;background:#f0f4f1;color:#1a2e1a}
+:root{
+  --ya:#1565c0;--yab:#e3f2fd;--yas:#42a5f5;
+  --ha:#6a1b9a;--hab:#f3e5f5;--has:#ab47bc;
+  --g:#2e7d32;--gbg:#e8f5e9;--gl:#4caf50;
+  --gray:#607d8b;--shadow:0 2px 14px rgba(0,0,0,.09);
+}
+#app{height:100vh;display:flex;flex-direction:column;max-width:480px;margin:0 auto;background:#f0f4f1}
+#topbar{background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;padding:14px 20px 12px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+#topbar h1{font-size:1.05rem;font-weight:700}
+#topbar p{font-size:.7rem;opacity:.75;margin-top:1px}
+#scrLbl{font-size:.7rem;background:rgba(255,255,255,.18);padding:3px 10px;border-radius:10px;opacity:.85}
+#content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px 80px}
+#bottomnav{background:#fff;border-top:1px solid #e0e0e0;display:flex;flex-shrink:0}
+.bnbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 2px 10px;cursor:pointer;border:none;background:transparent;color:var(--gray);font-size:.62rem;font-weight:600;gap:3px;min-height:56px}
+.bnbtn .ico{font-size:1.2rem}
+.bnbtn.on-ya{color:var(--ya)}
+.bnbtn.on-ha{color:var(--ha)}
+.bnbtn.on-g{color:var(--g)}
+.screen{display:none}.screen.active{display:block}
+
+.card{background:#fff;border-radius:16px;padding:18px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card-ttl{font-size:.85rem;font-weight:700;color:var(--g);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+
+.rec-hdr{color:#fff;border-radius:16px;padding:16px;margin-bottom:12px}
+.rec-hdr-ya{background:linear-gradient(135deg,var(--ya),var(--yas))}
+.rec-hdr-ha{background:linear-gradient(135deg,var(--ha),var(--has))}
+.rec-hdr .rh-t{font-size:1rem;font-weight:800}
+.rec-hdr .rh-s{font-size:.74rem;opacity:.88;margin-top:3px;line-height:1.4}
+.rec-hdr .rh-ec{font-size:.7rem;opacity:.78;margin-top:5px}
+
+.inp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.inp-grid.g2{grid-template-columns:1fr 1fr}
+.inp-g label{display:block;font-size:.72rem;font-weight:700;color:var(--gray);margin-bottom:5px}
+.inp-g input{width:100%;padding:12px 8px;border:2px solid #e0e0e0;border-radius:10px;font-size:1.05rem;font-weight:700;text-align:center;outline:none;color:#263238}
+.inp-g input:focus{border-color:var(--gl)}
+.inp-g .unit{font-size:.68rem;color:var(--gray);margin-top:3px}
+.quick-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.qbtn{padding:5px 12px;border:1.5px solid #ddd;border-radius:14px;font-size:.75rem;font-weight:700;cursor:pointer;color:var(--gray);background:#fff}
+.qbtn.on{background:var(--g);color:#fff;border-color:var(--g)}
+
+.calc-btn{width:100%;padding:15px;border:none;border-radius:14px;font-size:1rem;font-weight:800;cursor:pointer;color:#fff;background:linear-gradient(135deg,#1b5e20,#43a047);box-shadow:0 4px 14px rgba(46,125,50,.3);letter-spacing:.3px}
+
+.res-balde{border-radius:14px;padding:16px;margin-bottom:12px}
+.res-ya{background:var(--yab);border:2px solid var(--yas)}
+.res-ha{background:var(--hab);border:2px solid var(--has)}
+.rb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.rb-title{font-size:.9rem;font-weight:800}
+.rb-title-ya{color:var(--ya)}.rb-title-ha{color:var(--ha)}
+.rb-ec{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:10px;color:#fff}
+.rb-ec-ya{background:var(--ya)}.rb-ec-ha{background:var(--ha)}
+
+.fert-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.fert-row:last-child{border:none}
+.fert-nm{font-size:.84rem;font-weight:600}
+.fert-fml{font-size:.68rem;color:var(--gray);margin-top:1px}
+.fert-amt{font-size:1.1rem;font-weight:800;text-align:right}
+.fert-amt-ya{color:var(--ya)}.fert-amt-ha{color:var(--ha)}
+.fert-unit{font-size:.67rem;color:var(--gray)}
+
+.ec-badge{border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#1b5e20,var(--gl));color:#fff}
+.ecb-num{font-size:2rem;font-weight:900}
+.ecb-lbl{font-size:.75rem;opacity:.85}
+.ecb-sub{font-size:.7rem;opacity:.78;margin-top:4px}
+
+.alrt{border-radius:10px;padding:11px 14px;margin-bottom:10px;font-size:.82rem;line-height:1.4}
+.alrt-w{background:var(--hab);border-left:4px solid var(--ha);color:#3e1052}
+.alrt-i{background:var(--yab);border-left:4px solid var(--yas);color:#0d3b6e}
+.alrt-ok{background:var(--gbg);border-left:4px solid var(--gl);color:#1b3a1c}
+
+.tab-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.tab{padding:7px 13px;border-radius:20px;border:2px solid #ddd;background:#fff;font-size:.76rem;font-weight:700;cursor:pointer;color:var(--gray)}
+.tab.on{background:var(--g);color:#fff;border-color:var(--g)}
+
+.corr-tbl{width:100%;border-collapse:collapse;font-size:.74rem}
+.corr-tbl th{padding:7px 5px;font-size:.66rem;font-weight:700;color:#fff;text-align:center;white-space:nowrap}
+.th-ya{background:var(--ya)}.th-ha{background:var(--ha)}
+.corr-tbl td{padding:6px 4px;text-align:center;border-bottom:1px solid #f0f0f0;font-size:.74rem;white-space:nowrap}
+.td-d{font-weight:800;color:var(--g)}
+
+.steps{counter-reset:s}
+.step{counter-increment:s;padding:9px 12px 9px 28px;position:relative;border-left:3px solid var(--gbg);margin-bottom:6px;background:#fff;border-radius:0 10px 10px 0;margin-left:13px}
+.step::before{content:counter(s);position:absolute;left:-13px;top:9px;width:24px;height:24px;background:var(--g);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.75rem}
+.step strong{color:var(--g);font-size:.84rem;display:block}
+.step p{font-size:.76rem;color:#555;margin-top:3px;line-height:1.4}
+
+.vol-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.vol-btn{width:34px;height:34px;border-radius:50%;border:2px solid #ddd;background:#fff;font-size:1.1rem;font-weight:700;cursor:pointer;color:var(--gray);display:flex;align-items:center;justify-content:center}
+.vol-inp{width:84px;height:36px;border:2px solid #ddd;border-radius:10px;text-align:center;font-size:.95rem;font-weight:700;color:var(--g);outline:none}
+.vol-inp:focus{border-color:var(--gl)}
+.note{font-size:.76rem;color:var(--gray);background:#f5f7f6;border-radius:8px;padding:10px 12px;line-height:1.5;margin-top:10px}
+.slbl{font-size:.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin:14px 0 8px;display:block}
+
+/* comparar */
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cmp-col{border-radius:14px;padding:12px;overflow:hidden}
+.cmp-ya{background:var(--yab);border:2px solid var(--yas)}
+.cmp-ha{background:var(--hab);border:2px solid var(--has)}
+.cmp-h{font-size:.82rem;font-weight:800;margin-bottom:8px;text-align:center}
+.cmp-h-ya{color:var(--ya)}.cmp-h-ha{color:var(--ha)}
+.cmp-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06);font-size:.74rem;gap:4px}
+.cmp-row:last-child{border:none}
+.cmp-row .n{font-weight:600;flex:1}
+.cmp-row .v{font-weight:800;white-space:nowrap}
+.cmp-tot{margin-top:8px;padding-top:8px;border-top:2px solid rgba(0,0,0,.12);font-size:.78rem;font-weight:800;display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="topbar">
+    <div><h1>🥬 NFT Alface</h1><p>Solução nutritiva · comparar marcas</p></div>
+    <span id="scrLbl">Yara</span>
+  </div>
+  <div id="content">
+
+    <!-- ═══ ABA YARA ════════════════════════════════════════════ -->
+    <div class="screen active" id="s-yara"></div>
+
+    <!-- ═══ ABA HAIFA ═══════════════════════════════════════════ -->
+    <div class="screen" id="s-haifa"></div>
+
+    <!-- ═══ ABA COMPARAR ════════════════════════════════════════ -->
+    <div class="screen" id="s-cmp">
+      <div class="card">
+        <div class="card-ttl">⚖️ Comparar Yara × Haifa</div>
+        <div class="note" style="margin-bottom:14px">Mesmo volume e mesmo EC alvo nas duas receitas. Veja lado a lado as doses e a massa total de cada marca.</div>
+        <div class="inp-grid">
+          <div class="inp-g"><label>💧 EC água</label><input type="number" id="cmp-agua" value="0.0" step="0.01" min="0" oninput="compare()"><div class="unit">mS/cm</div></div>
+          <div class="inp-g"><label>🎯 EC alvo</label><input type="number" id="cmp-alvo" value="1.41" step="0.01" min="0.1" oninput="compare()"><div class="unit">mS/cm</div></div>
+          <div class="inp-g"><label>🪣 Volume</label><input type="number" id="cmp-vol" value="3000" step="100" min="1" oninput="compare()"><div class="unit">litros</div></div>
+        </div>
+        <div class="quick-row">
+          <button class="qbtn" onclick="cmpVol(500)">500L</button>
+          <button class="qbtn" onclick="cmpVol(1000)">1000L</button>
+          <button class="qbtn" onclick="cmpVol(2000)">2000L</button>
+          <button class="qbtn on" onclick="cmpVol(3000)">3000L</button>
+        </div>
+      </div>
+      <div id="cmp-out"></div>
+    </div>
+
+    <!-- ═══ ABA SOBRE ═══════════════════════════════════════════ -->
+    <div class="screen" id="s-info">
+      <div class="card">
+        <div style="font-size:1rem;font-weight:700;color:var(--g);margin-bottom:12px">🥬 NFT Alface — v2.0</div>
+        <div class="note" style="margin-bottom:14px">App de cálculo de solução nutritiva para alface em NFT. Duas receitas de marcas diferentes, calculadas direto pelas planilhas laminadas da Leslie. Cálculo: <strong>dose = g(3000L) × ΔEC ÷ EC_base × (volume ÷ 3000)</strong>, onde ΔEC = EC alvo − EC da água.</div>
+        <span class="slbl">🔵 Alface Yara (EC base 1,41)</span>
+        <div style="font-size:.78rem;line-height:1.8;margin-bottom:12px">
+          Calcinit 907 · Yara Rega NK 528 · Krista-K 45 1296 · Krista-MAG 350 · Krista-MKP 285 · Rexolin Q48 67 · Rexolin CXK 39 <span style="color:var(--gray)">(g/3000 L na receita cheia)</span>
+        </div>
+        <span class="slbl">🟣 Alface Haifa (EC base ≈1,30)</span>
+        <div style="font-size:.78rem;line-height:1.8;margin-bottom:12px">
+          <strong>Balde A:</strong> Nit. Cálcio 1260 · Móvel Ca 60 · Fetri Combi 45 · Basafer 57<br>
+          <strong>Balde B:</strong> NPK 13-02-44 780 · Sulf. Magnésio 690 · Nitr. Magnésio 180 · MKP 360
+        </div>
+        <span class="slbl">Observações</span>
+        <div style="font-size:.74rem;color:var(--gray);line-height:1.7">
+          • Sempre dissolver o nitrato de cálcio (Calcinit / Nit. Cálcio) <strong>separado</strong> dos fosfatos.<br>
+          • Na receita Haifa, diluir o Balde A no reservatório antes do Balde B.<br>
+          • EC base = EC que a receita cheia (3000 L) gera, lido das próprias planilhas.<br>
+          • pH alvo: 5,8–6,2. Em breve: histórico de preparo e custo por marca.
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <div id="bottomnav">
+    <button class="bnbtn on-ya" id="bn-yara" onclick="goTo('yara')"><span class="ico">🔵</span><span>Yara</span></button>
+    <button class="bnbtn" id="bn-haifa" onclick="goTo('haifa')"><span class="ico">🟣</span><span>Haifa</span></button>
+    <button class="bnbtn" id="bn-cmp" onclick="goTo('cmp')"><span class="ico">⚖️</span><span>Comparar</span></button>
+    <button class="bnbtn" id="bn-info" onclick="goTo('info')"><span class="ico">ℹ️</span><span>Sobre</span></button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+//  DADOS — transcritos das planilhas laminadas (g por 3000 L na receita cheia)
+//  EC_base = EC que a receita cheia gera (lido da própria planilha)
+// ══════════════════════════════════════════════════════════════════════════════
+const REF_VOL = 3000;
+
+const RECIPES = {
+  yara: {
+    nome:'Alface Yara', tag:'ya',
+    sub:'Calcinit · Yara Rega · Krista-K · Krista-MAG · Krista-MKP · Rexolin',
+    ecBase:1.41, ecAlvo:1.41,
+    baldes:[
+      {id:'A', nome:'Balde A', ferts:[
+        {nome:'Calcinit',      fml:'Ca(NO₃)₂·4H₂O',     g:907,  first:true},
+        {nome:'Yara Rega NK',  fml:'NK 12-43',           g:528},
+        {nome:'Krista-K 45',   fml:'KNO₃',               g:1296},
+        {nome:'Krista-MAG',    fml:'MgSO₄·7H₂O',         g:350},
+        {nome:'Krista-MKP',    fml:'KH₂PO₄',             g:285, fosfato:true},
+        {nome:'Rexolin Q48',   fml:'Fe-EDTA 9,5%',       g:67,  micro:true},
+        {nome:'Rexolin CXK',   fml:'Fe+Mn+B+Cu+Zn+Mo',   g:39,  micro:true},
+      ]}
+    ]
+  },
+  haifa: {
+    nome:'Alface Haifa', tag:'ha',
+    sub:'Nit. Cálcio · Móvel Ca · Fetri Combi · Basafer + NPK · Mg',
+    ecBase:1.278, ecAlvo:1.30,
+    baldes:[
+      {id:'A', nome:'Balde A', ferts:[
+        {nome:'Nitrato de Cálcio', fml:'Ca(NO₃)₂',  g:1260, first:true},
+        {nome:'Móvel Ca',          fml:'Cálcio',    g:60},
+        {nome:'Fetri Combi',       fml:'micros',    g:45, micro:true},
+        {nome:'Basafer',           fml:'Fe',        g:57, micro:true},
+      ]},
+      {id:'B', nome:'Balde B', ferts:[
+        {nome:'NPK 13-02-44',        fml:'N-P₂O₅-K₂O',    g:780, fosfato:true},
+        {nome:'Sulfato de Magnésio', fml:'MgSO₄·7H₂O',    g:690},
+        {nome:'Nitrato de Magnésio', fml:'Mg(NO₃)₂·6H₂O', g:180},
+        {nome:'MKP',                 fml:'KH₂PO₄',        g:360, fosfato:true},
+      ]}
+    ]
+  }
+};
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════════════════════════════════════
+function fmtG(g){
+  if(g==null||isNaN(g)) return '—';
+  if(g<0.001) return (g*1e6).toFixed(0)+' µg';
+  if(g<1)     return (g*1000).toFixed(1)+' mg';
+  if(g>=1000) return (g/1000).toFixed(2)+' kg';
+  return g.toFixed(1)+' g';
+}
+function nf(v){ return Number(v).toLocaleString('pt-BR'); }
+function val(id, dft){ const e=document.getElementById(id); const v=parseFloat(e&&e.value); return isNaN(v)?dft:v; }
+function allFerts(rec){ return rec.baldes.flatMap(b=>b.ferts); }
+function icon(rec){ return rec.tag==='ya'?'🔵':'🟣'; }
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  MONTA A ABA DE UMA RECEITA (Yara / Haifa)
+// ══════════════════════════════════════════════════════════════════════════════
+function buildRecipeScreen(rid){
+  const rec = RECIPES[rid], t = rec.tag;
+  document.getElementById('s-'+rid).innerHTML = `
+    <div class="rec-hdr rec-hdr-${t}">
+      <div class="rh-t">${icon(rec)} ${rec.nome}</div>
+      <div class="rh-s">${rec.sub}</div>
+      <div class="rh-ec">EC base da receita cheia: ${rec.ecBase.toFixed(2)} mS/cm · 3000 L${rec.baldes.length>1?' · 2 baldes':''}</div>
+    </div>
+    <div class="tab-row">
+      <button class="tab on" id="t-${rid}-calc" onclick="swTab('${rid}','calc')">⚗️ Calcular</button>
+      <button class="tab" id="t-${rid}-rec" onclick="swTab('${rid}','rec')">📋 Receita</button>
+      <button class="tab" id="t-${rid}-corr" onclick="swTab('${rid}','corr')">⚡ Correção</button>
+      <button class="tab" id="t-${rid}-tab" onclick="swTab('${rid}','tab')">📊 Tabela</button>
+    </div>
+
+    <div id="p-${rid}-calc">
+      <div class="card">
+        <div class="card-ttl">⚗️ Calcular doses</div>
+        <div class="inp-grid">
+          <div class="inp-g"><label>💧 EC água</label><input type="number" id="${rid}-agua" value="0.0" step="0.01" min="0" oninput="calcRec('${rid}')"><div class="unit">mS/cm</div></div>
+          <div class="inp-g"><label>🎯 EC alvo</label><input type="number" id="${rid}-alvo" value="${rec.ecAlvo}" step="0.01" min="0.1" oninput="calcRec('${rid}')"><div class="unit">mS/cm</div></div>
+          <div class="inp-g"><label>🪣 Volume</label><input type="number" id="${rid}-vol" value="3000" step="100" min="1" oninput="calcRec('${rid}')"><div class="unit">litros</div></div>
+        </div>
+        <div class="quick-row">
+          <button class="qbtn" onclick="setRecVol('${rid}',500)">500L</button>
+          <button class="qbtn" onclick="setRecVol('${rid}',1000)">1000L</button>
+          <button class="qbtn" onclick="setRecVol('${rid}',2000)">2000L</button>
+          <button class="qbtn on" onclick="setRecVol('${rid}',3000)">3000L</button>
+        </div>
+      </div>
+      <div id="${rid}-calc-out"></div>
+    </div>
+
+    <div id="p-${rid}-rec" style="display:none">
+      <div class="card">
+        <div class="card-ttl">📋 Receita cheia (EC ${rec.ecBase.toFixed(2)})</div>
+        <div class="vol-row">
+          <span style="font-size:.78rem;font-weight:700;color:var(--gray);width:60px">Volume</span>
+          <button class="vol-btn" onclick="adjRecVol('${rid}','rec',-100)">−</button>
+          <input class="vol-inp" id="${rid}-rvol" type="number" value="3000" oninput="recRec('${rid}')">
+          <span style="font-size:.78rem;color:var(--gray)">L</span>
+        </div>
+        <div id="${rid}-rec-out"></div>
+      </div>
+      <div class="card"><div class="card-ttl">📝 Passo a passo</div><div class="steps" id="${rid}-rec-steps"></div></div>
+    </div>
+
+    <div id="p-${rid}-corr" style="display:none">
+      <div class="card">
+        <div class="card-ttl">⚡ Correção de EC</div>
+        <div class="note" style="margin-bottom:14px">EC do tanque desviou? Informe o EC atual e o desejado para saber quanto adicionar — ou quantos litros de água diluir.</div>
+        <div class="inp-grid g2">
+          <div class="inp-g"><label>EC atual</label><input type="number" id="${rid}-cAt" value="1.0" step="0.01" oninput="corrRec('${rid}')"><div class="unit">mS/cm</div></div>
+          <div class="inp-g"><label>EC desejado</label><input type="number" id="${rid}-cDs" value="${rec.ecAlvo}" step="0.01" oninput="corrRec('${rid}')"><div class="unit">mS/cm</div></div>
+        </div>
+        <div class="vol-row">
+          <span style="font-size:.78rem;font-weight:700;color:var(--gray);width:60px">Volume</span>
+          <button class="vol-btn" onclick="adjRecVol('${rid}','corr',-100)">−</button>
+          <input class="vol-inp" id="${rid}-cvol" type="number" value="3000" oninput="corrRec('${rid}')">
+          <span style="font-size:.78rem;color:var(--gray)">L</span>
+        </div>
+        <div id="${rid}-corr-out"></div>
+      </div>
+    </div>
+
+    <div id="p-${rid}-tab" style="display:none">
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:14px 16px 4px;font-size:.78rem;font-weight:700;color:var(--gray)">Gramas a adicionar em <span id="${rid}-tvol-lbl">3000</span> L por ΔEC (mS/cm):</div>
+        <div class="vol-row" style="padding:6px 16px 10px;margin:0">
+          <button class="vol-btn" onclick="adjRecVol('${rid}','tab',-100)">−</button>
+          <input class="vol-inp" id="${rid}-tvol" type="number" value="3000" oninput="tabRec('${rid}')">
+          <span style="font-size:.78rem;color:var(--gray)">L</span>
+        </div>
+        <div style="overflow-x:auto" id="${rid}-tab-out"></div>
+      </div>
+    </div>`;
+}
+
+// ── Linha de fertilizante ──
+function fertRowHTML(f, t, vol){
+  const mgL = vol ? (f._g/vol*1000).toFixed(2)+' mg/L' : '';
+  return `<div class="fert-row"><div><div class="fert-nm">${f.nome}</div><div class="fert-fml">${f.fml}</div></div>
+    <div style="text-align:right"><div class="fert-amt fert-amt-${t}">${fmtG(f._g)}</div><div class="fert-unit">${mgL}</div></div></div>`;
+}
+
+// ── Blocos de doses por balde (frac = fração da receita cheia; vol = p/ mg/L) ──
+function baldeBlocksHTML(rec, frac, vol){
+  const t = rec.tag, mostraBalde = rec.baldes.length>1;
+  return rec.baldes.map(b=>{
+    const rows = b.ferts.map(f=>fertRowHTML({...f,_g:f.g*frac*(vol/REF_VOL)}, t, vol)).join('');
+    const lbl  = mostraBalde ? `<div class="rb-head"><span class="rb-title rb-title-${t}">${icon(rec)} ${b.nome}</span></div>` : '';
+    return `<div class="res-balde res-${t}">${lbl}${rows}</div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  CALCULAR
+// ══════════════════════════════════════════════════════════════════════════════
+function calcRec(rid){
+  const rec = RECIPES[rid], t = rec.tag;
+  const agua = val(rid+'-agua',0), alvo = val(rid+'-alvo',rec.ecAlvo), vol = Math.max(1,val(rid+'-vol',3000));
+  const delta = alvo - agua, out = document.getElementById(rid+'-calc-out');
+
+  if(delta<=0){
+    const litros = (vol*(agua/alvo-1)).toFixed(0);
+    out.innerHTML = `<div class="alrt alrt-w">⚠️ EC da água (${agua.toFixed(2)}) ≥ EC alvo (${alvo.toFixed(2)}). Não adicione fertilizante.<br><br>💧 Para baixar até ${alvo.toFixed(2)} em ${nf(vol)} L, adicione <strong>${nf(litros)} L de água pura</strong>.</div>`;
+    return;
+  }
+  const frac = delta / rec.ecBase;
+  const total = allFerts(rec).reduce((s,f)=>s+f.g*frac*(vol/REF_VOL),0);
+
+  let html = `<div class="ec-badge">
+      <div><div class="ecb-lbl">EC final da solução</div><div class="ecb-num">${alvo.toFixed(2)}</div>
+      <div class="ecb-sub">💧 água ${agua.toFixed(2)} + ferts ${delta.toFixed(2)}</div></div>
+      <div style="text-align:right"><div style="font-size:.72rem;opacity:.8">mS/cm</div>
+      <div style="font-size:.72rem;opacity:.78;margin-top:8px">${(frac*100).toFixed(0)}% da<br>receita cheia</div></div></div>`;
+
+  if(frac>1.15) html += `<div class="alrt alrt-w">⚠️ Fração ${(frac*100).toFixed(0)}% — acima da receita cheia. Confira o EC alvo (máx. útil ≈ ${(rec.ecBase+agua).toFixed(2)}).</div>`;
+
+  html += baldeBlocksHTML(rec, frac, vol);
+  html += `<div class="card"><div class="card-ttl">📝 Ordem de preparo</div><div class="steps">${stepsHTML(rec,frac,vol,agua,alvo)}</div></div>`;
+  out.innerHTML = html;
+}
+
+function stepsHTML(rec, frac, vol, agua, alvo){
+  const two = rec.baldes.length>1, dose = f=>fmtG(f.g*frac*(vol/REF_VOL));
+  let s = `<div class="step"><strong>Meça a água</strong><p>Confirme EC (${agua.toFixed(2)} mS/cm) e pH (ideal 5,5–6,5) antes de adicionar fertilizante.</p></div>`;
+  rec.baldes.forEach(b=>{
+    const first  = b.ferts.find(f=>f.first);
+    const macros = b.ferts.filter(f=>!f.first&&!f.micro);
+    const micros = b.ferts.filter(f=>f.micro);
+    const bn = two? ` (${b.nome})`:'';
+    if(first) s += `<div class="step"><strong>Cálcio primeiro${bn} — separado</strong><p>Dissolva <strong>${dose(first)}</strong> de ${first.nome} num recipiente à parte. Nunca misture com fosfatos concentrados.</p></div>`;
+    if(macros.length) s += `<div class="step"><strong>Macronutrientes${bn}</strong><p>${macros.map(f=>`${f.nome}: <strong>${dose(f)}</strong>`).join(' · ')}</p></div>`;
+    if(micros.length) s += `<div class="step"><strong>Micronutrientes${bn}</strong><p>${micros.map(f=>`${f.nome}: <strong>${dose(f)}</strong>`).join(' · ')}. Dissolva em ~1 L de água morna antes.</p></div>`;
+  });
+  if(two){
+    s += `<div class="step"><strong>Balde A no reservatório primeiro</strong><p>Despeje todo o Balde A nos ${nf(vol)} L e misture bem.</p></div>`;
+    s += `<div class="step"><strong>Depois o Balde B</strong><p>Só adicione o Balde B com o A já diluído. Misture bem.</p></div>`;
+  } else {
+    s += `<div class="step"><strong>Adicione ao reservatório</strong><p>Despeje no reservatório de ${nf(vol)} L e misture bem.</p></div>`;
+  }
+  s += `<div class="step"><strong>Complete e ajuste</strong><p>Complete até ${nf(vol)} L. Ajuste pH para 5,8–6,2. EC esperado: <strong>${alvo.toFixed(2)} mS/cm</strong>.</p></div>`;
+  return s;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  RECEITA CHEIA
+// ══════════════════════════════════════════════════════════════════════════════
+function recRec(rid){
+  const rec = RECIPES[rid], vol = Math.max(1,val(rid+'-rvol',3000)), frac = vol/REF_VOL;
+  document.getElementById(rid+'-rec-out').innerHTML = baldeBlocksHTML(rec, 1, vol); // frac de EC = 1 (cheia); escala por volume dentro
+  const dose = f=>fmtG(f.g*frac);
+  let s='';
+  rec.baldes.forEach(b=>{
+    const first=b.ferts.find(f=>f.first), macros=b.ferts.filter(f=>!f.first&&!f.micro), micros=b.ferts.filter(f=>f.micro);
+    const bn=rec.baldes.length>1?` (${b.nome})`:'';
+    if(first) s+=`<div class="step"><strong>Cálcio primeiro${bn} — separado</strong><p>${first.nome}: <strong>${dose(first)}</strong>. Dissolva à parte dos fosfatos.</p></div>`;
+    if(macros.length) s+=`<div class="step"><strong>Macros${bn}</strong><p>${macros.map(f=>`${f.nome}: <strong>${dose(f)}</strong>`).join(' · ')}</p></div>`;
+    if(micros.length) s+=`<div class="step"><strong>Micros${bn}</strong><p>${micros.map(f=>`${f.nome}: <strong>${dose(f)}</strong>`).join(' · ')}. Dissolva em água morna.</p></div>`;
+  });
+  s+=`<div class="step"><strong>Diluir e ajustar</strong><p>Complete até ${nf(vol)} L. EC ≈ ${rec.ecBase.toFixed(2)} mS/cm (sem somar o EC da água). pH 5,8–6,2.</p></div>`;
+  document.getElementById(rid+'-rec-steps').innerHTML=s;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  CORREÇÃO
+// ══════════════════════════════════════════════════════════════════════════════
+function corrRec(rid){
+  const rec=RECIPES[rid], t=rec.tag;
+  const at=val(rid+'-cAt',0), ds=val(rid+'-cDs',rec.ecAlvo), vol=Math.max(1,val(rid+'-cvol',3000));
+  const out=document.getElementById(rid+'-corr-out'), delta=ds-at;
+  if(Math.abs(delta)<0.005){ out.innerHTML='<div class="alrt alrt-ok">✅ EC já no valor desejado.</div>'; return; }
+  if(delta<0){
+    const l=(vol*(at/ds-1)).toFixed(0);
+    out.innerHTML=`<div class="alrt alrt-w">💧 Diluir: adicione <strong>${nf(l)} L de água pura</strong>.<br><small>${nf(vol)} L × (${at.toFixed(2)}/${ds.toFixed(2)} − 1)</small></div>`;
+    return;
+  }
+  const frac=delta/rec.ecBase;
+  out.innerHTML=`<div class="res-balde res-${t}">
+    <div class="rb-head"><span class="rb-title rb-title-${t}">Adicionar — ${nf(vol)} L</span><span class="rb-ec rb-ec-${t}">+${delta.toFixed(2)} mS/cm</span></div>
+    ${allFerts(rec).map(f=>fertRowHTML({...f,_g:f.g*frac*(vol/REF_VOL)}, t, 0)).join('')}
+  </div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  TABELA DE REFERÊNCIA (ΔEC 0,1 → 1,0)
+// ══════════════════════════════════════════════════════════════════════════════
+function tabRec(rid){
+  const rec=RECIPES[rid], t=rec.tag, vol=Math.max(1,val(rid+'-tvol',3000));
+  document.getElementById(rid+'-tvol-lbl').textContent=nf(vol);
+  const ferts=allFerts(rec), deltas=[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0];
+  const th=`<th class="th-${t}">ΔEC</th>`+ferts.map(f=>`<th class="th-${t}">${f.nome.split(' ')[0]}</th>`).join('');
+  const rows=deltas.map((d,i)=>{
+    const bg=i%2?'#fff':'#fafafa', frac=d/rec.ecBase;
+    let c=`<td class="td-d" style="background:${bg}">${d.toFixed(1)}</td>`;
+    ferts.forEach(f=>{ c+=`<td style="background:${bg}">${fmtG(f.g*frac*(vol/REF_VOL))}</td>`; });
+    return `<tr>${c}</tr>`;
+  }).join('');
+  document.getElementById(rid+'-tab-out').innerHTML=`<table class="corr-tbl"><thead><tr>${th}</tr></thead><tbody>${rows}</tbody></table>
+    <div style="padding:10px 14px;font-size:.66rem;color:var(--gray)">EC base ${rec.nome}: ${rec.ecBase.toFixed(3)} mS/cm (receita cheia em 3000 L).</div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  COMPARAR
+// ══════════════════════════════════════════════════════════════════════════════
+function cmpVol(v){ document.getElementById('cmp-vol').value=v; document.querySelectorAll('#s-cmp .qbtn').forEach(b=>b.classList.toggle('on',b.textContent===v+'L')); compare(); }
+function compare(){
+  const agua=val('cmp-agua',0), alvo=val('cmp-alvo',1.41), vol=Math.max(1,val('cmp-vol',3000));
+  const delta=alvo-agua, out=document.getElementById('cmp-out');
+  if(delta<=0){ out.innerHTML='<div class="alrt alrt-w">⚠️ EC alvo deve ser maior que o EC da água.</div>'; return; }
+  function col(rid){
+    const rec=RECIPES[rid], frac=delta/rec.ecBase, ferts=allFerts(rec);
+    const rows=ferts.map(f=>{const g=f.g*frac*(vol/REF_VOL);return `<div class="cmp-row"><span class="n">${f.nome}</span><span class="v">${fmtG(g)}</span></div>`;}).join('');
+    const tot=ferts.reduce((s,f)=>s+f.g*frac*(vol/REF_VOL),0);
+    const aviso = frac>1.15?' ⚠️':'';
+    return `<div class="cmp-col cmp-${rec.tag}">
+      <div class="cmp-h cmp-h-${rec.tag}">${icon(rec)} ${rec.nome}</div>
+      ${rows}
+      <div class="cmp-tot"><span>Total${aviso}</span><span>${fmtG(tot)}</span></div>
+      <div class="cmp-tot" style="border:none;font-size:.7rem;color:var(--gray);font-weight:600"><span>fração</span><span>${(frac*100).toFixed(0)}%</span></div>
+    </div>`;
+  }
+  out.innerHTML=`<div class="card" style="padding:12px"><div class="cmp-grid">${col('yara')}${col('haifa')}</div>
+    <div class="note" style="margin-top:12px">Para ${nf(vol)} L mirando EC ${alvo.toFixed(2)} (água ${agua.toFixed(2)}). As duas receitas chegam ao mesmo EC; a diferença está em quais adubos e quanta massa cada marca exige. Custo por marca chega na próxima versão.</div></div>`;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  NAVEGAÇÃO
+// ══════════════════════════════════════════════════════════════════════════════
+const LBL={yara:'Yara',haifa:'Haifa',cmp:'Comparar',info:'Sobre'};
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  document.querySelectorAll('.bnbtn').forEach(b=>b.className='bnbtn');
+  const onCls = id==='yara'?'on-ya':id==='haifa'?'on-ha':'on-g';
+  document.getElementById('bn-'+id).classList.add(onCls);
+  document.getElementById('scrLbl').textContent=LBL[id];
+  document.getElementById('content').scrollTop=0;
+  if(id==='yara'||id==='haifa') calcRec(id);
+  if(id==='cmp') compare();
+}
+function swTab(rid,tab){
+  ['calc','rec','corr','tab'].forEach(p=>{document.getElementById('p-'+rid+'-'+p).style.display='none';document.getElementById('t-'+rid+'-'+p).classList.remove('on');});
+  document.getElementById('p-'+rid+'-'+tab).style.display='block';
+  document.getElementById('t-'+rid+'-'+tab).classList.add('on');
+  if(tab==='calc')calcRec(rid); else if(tab==='rec')recRec(rid); else if(tab==='corr')corrRec(rid); else if(tab==='tab')tabRec(rid);
+}
+function setRecVol(rid,v){ document.getElementById(rid+'-vol').value=v; document.querySelectorAll('#p-'+rid+'-calc .qbtn').forEach(b=>b.classList.toggle('on',b.textContent===v+'L')); calcRec(rid); }
+function adjRecVol(rid,which,d){
+  const map={rec:rid+'-rvol',corr:rid+'-cvol',tab:rid+'-tvol'}, el=document.getElementById(map[which]);
+  el.value=Math.max(1,(parseFloat(el.value)||3000)+d);
+  if(which==='rec')recRec(rid); else if(which==='corr')corrRec(rid); else if(which==='tab')tabRec(rid);
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════════════════════════════
+window.onload=function(){
+  buildRecipeScreen('yara');
+  buildRecipeScreen('haifa');
+  ['yara','haifa'].forEach(rid=>{ calcRec(rid); recRec(rid); corrRec(rid); tabRec(rid); });
+  compare();
+};
+</script>
+</body>
+</html>
