@@ -35,20 +35,20 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
   padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.22);letter-spacing:.4px;text-transform:uppercase}
 
 #content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 14px 92px}
-.screen{display:none;animation:fade .28s ease}.screen.active{display:block}
-@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.screen{display:none}.screen.active{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
 /* ── BOTTOM NAV ── */
 #bottomnav{position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);
   border-top:1px solid var(--line);display:flex;flex-shrink:0;box-shadow:0 -6px 22px rgba(20,40,25,.08);padding:4px 4px 6px}
 .bnbtn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   padding:8px 2px 6px;cursor:pointer;border:none;background:transparent;color:var(--gray);
-  font-size:.6rem;font-weight:700;letter-spacing:.2px;min-height:54px;position:relative;transition:color .15s}
+  font-size:.6rem;font-weight:700;letter-spacing:.2px;min-height:54px;position:relative;transition:color .15s;border-radius:14px}
 .bnbtn .ico{font-size:1.18rem;width:40px;height:30px;display:flex;align-items:center;justify-content:center;
-  border-radius:14px;transition:background .18s,transform .18s}
-.bnbtn.on-ya{color:var(--ya)} .bnbtn.on-ya .ico{background:var(--yab);transform:translateY(-1px)}
-.bnbtn.on-ha{color:var(--ha)} .bnbtn.on-ha .ico{background:var(--hab);transform:translateY(-1px)}
-.bnbtn.on-g{color:var(--g)}   .bnbtn.on-g .ico{background:var(--gbg);transform:translateY(-1px)}
+  border-radius:14px;transition:background .2s,transform .2s}
+.bnbtn.on-ya{color:var(--ya)} .bnbtn.on-ya .ico{background:var(--yab);transform:translateY(-2px) scale(1.08)}
+.bnbtn.on-ha{color:var(--ha)} .bnbtn.on-ha .ico{background:var(--hab);transform:translateY(-2px) scale(1.08)}
+.bnbtn.on-g{color:var(--g)}   .bnbtn.on-g .ico{background:var(--gbg);transform:translateY(-2px) scale(1.08)}
 
 /* ── CARDS ── */
 .card{background:#fff;border-radius:20px;padding:18px;margin-bottom:13px;box-shadow:var(--sh);border:1px solid rgba(255,255,255,.8)}
@@ -69,8 +69,8 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
 /* ── TABS ── */
 .tab-row{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
 .tab{padding:9px 15px;border-radius:22px;border:1.5px solid var(--line);background:#fff;font-size:.76rem;
-  font-weight:700;cursor:pointer;color:var(--gray);white-space:nowrap;flex-shrink:0;box-shadow:var(--sh-sm);transition:.15s}
-.tab.on{background:linear-gradient(135deg,var(--g2),var(--gl));color:#fff;border-color:transparent;box-shadow:0 5px 14px rgba(46,125,50,.32)}
+  font-weight:700;cursor:pointer;color:var(--gray);white-space:nowrap;flex-shrink:0;box-shadow:var(--sh-sm);transition:.18s}
+.tab.on{background:linear-gradient(135deg,var(--g2),var(--gl));color:#fff;border-color:transparent;box-shadow:0 5px 14px rgba(46,125,50,.32);transform:translateY(-1px)}
 
 /* ── INPUTS ── */
 .inp-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px}
@@ -80,10 +80,22 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
   font-weight:800;text-align:center;outline:none;color:var(--ink);background:#fbfcfb;transition:.15s}
 .inp-g input:focus{border-color:var(--gl);background:#fff;box-shadow:0 0 0 4px rgba(76,175,80,.13)}
 .inp-g .unit{font-size:.64rem;color:var(--gray);margin-top:4px;text-align:center;font-weight:600}
+
+/* ── SLIDERS ── */
+.sliders{margin:2px 0 14px;display:flex;flex-direction:column;gap:13px}
+.sld-row{display:flex;align-items:center;gap:11px}
+.sld-l{font-size:.7rem;font-weight:700;color:var(--gray);width:62px;flex-shrink:0}
+.slider{-webkit-appearance:none;appearance:none;flex:1;height:7px;border-radius:7px;background:#e3e8e4;outline:none;cursor:pointer}
+.slider::-webkit-slider-thumb{-webkit-appearance:none;width:23px;height:23px;border-radius:50%;
+  background:linear-gradient(135deg,#2e7d32,#4caf50);border:3px solid #fff;box-shadow:0 2px 9px rgba(46,125,50,.5);cursor:pointer;transition:transform .1s}
+.slider:active::-webkit-slider-thumb{transform:scale(1.18)}
+.slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#2e7d32;border:3px solid #fff;cursor:pointer}
+
 .quick-row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:4px}
 .qbtn{padding:7px 14px;border:1.5px solid #e3e8e4;border-radius:20px;font-size:.74rem;font-weight:700;
   cursor:pointer;color:var(--gray);background:#fff;transition:.15s;box-shadow:var(--sh-sm)}
 .qbtn.on{background:linear-gradient(135deg,var(--g2),var(--gl));color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(46,125,50,.3)}
+.qbtn:active{transform:scale(.95)}
 
 /* ── EC BADGE ── */
 .ec-badge{border-radius:20px;padding:18px;margin-bottom:14px;color:#fff;position:relative;overflow:hidden;
@@ -95,8 +107,14 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
 .ecb-num small{font-size:.8rem;font-weight:600;opacity:.8}
 .ecb-side{text-align:right;font-size:.7rem;opacity:.9;line-height:1.7;font-weight:600}
 .ecb-prog{height:8px;background:rgba(255,255,255,.22);border-radius:6px;margin-top:14px;overflow:hidden;position:relative}
-.ecb-prog i{display:block;height:100%;background:linear-gradient(90deg,#c8e6c9,#fff);border-radius:6px;transition:width .35s}
+.ecb-prog i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#c8e6c9,#fff);border-radius:6px;transform-origin:left;transform:scaleX(var(--s,0))}
 .ecb-pct{font-size:.68rem;opacity:.9;margin-top:6px;font-weight:600;position:relative}
+
+/* ── SHARE ── */
+.share-btn{width:100%;margin-bottom:13px;padding:14px;border:none;border-radius:16px;font-size:.92rem;
+  font-weight:800;color:#fff;background:linear-gradient(135deg,#2e7d32,#43a047);box-shadow:0 6px 16px rgba(46,125,50,.3);
+  cursor:pointer;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px}
+.share-btn:active{transform:scale(.98)}
 
 /* ── RESULT BALDE ── */
 .res-balde{background:#fff;border-radius:18px;padding:8px 16px;margin-bottom:12px;box-shadow:var(--sh);border:1px solid var(--line);position:relative}
@@ -113,12 +131,23 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
 .fert-fml{font-size:.66rem;color:var(--gray);margin-top:1px;font-weight:500}
 .tagm{font-size:.55rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px;padding:2px 6px;border-radius:6px;background:#eceff1;color:#78909c}
 .fert-bar{height:5px;background:#eef1ef;border-radius:3px;margin-top:7px;overflow:hidden}
-.fert-bar i{display:block;height:100%;border-radius:3px;transition:width .4s}
+.fert-bar i{display:block;height:100%;width:100%;border-radius:3px;transform-origin:left;transform:scaleX(var(--s,1))}
 .bar-ya{background:linear-gradient(90deg,var(--yas),var(--ya))}
 .bar-ha{background:linear-gradient(90deg,var(--has),var(--ha))}
 .fert-pill{font-size:1rem;font-weight:800;padding:7px 12px;border-radius:13px;white-space:nowrap;flex-shrink:0;letter-spacing:.2px}
 .pill-ya{background:var(--yab);color:var(--ya2)} .pill-ha{background:var(--hab);color:var(--ha2)}
 .fert-sub{font-size:.62rem;color:var(--gray);font-weight:600;display:block;text-align:right;margin-top:3px}
+
+/* entry animations (só ao revelar) */
+.res-anim .ec-badge{animation:rise .45s ease both}
+.res-anim .ecb-num{animation:pop .55s cubic-bezier(.2,.9,.3,1.2) both}
+.res-anim .ecb-prog i{animation:grow .8s cubic-bezier(.2,.8,.2,1) both}
+.res-anim .res-balde{animation:rise .5s ease both}
+.res-anim .res-balde:nth-of-type(2){animation-delay:.07s}
+.res-anim .fert-bar i{animation:grow .65s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes pop{from{opacity:0;transform:scale(.9)}}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
 
 /* ── ALERTS ── */
 .alrt{border-radius:14px;padding:13px 15px;margin-bottom:11px;font-size:.82rem;line-height:1.5;display:flex;gap:9px;align-items:flex-start;box-shadow:var(--sh-sm)}
@@ -144,7 +173,7 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
 .vol-row .vl{font-size:.72rem;font-weight:700;color:var(--gray);width:54px}
 .vol-btn{width:36px;height:36px;border-radius:12px;border:1.5px solid #e3e8e4;background:#fff;font-size:1.2rem;
   font-weight:700;cursor:pointer;color:var(--g);display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-sm)}
-.vol-btn:active{transform:scale(.94)}
+.vol-btn:active{transform:scale(.92)}
 .vol-inp{width:90px;height:38px;border:1.5px solid #e3e8e4;border-radius:12px;text-align:center;font-size:1rem;
   font-weight:800;color:var(--g);outline:none;background:#fbfcfb}
 .vol-inp:focus{border-color:var(--gl);background:#fff}
@@ -175,6 +204,15 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
 .cmp-tot{margin-top:10px;padding:10px 11px;border-radius:12px;font-size:.78rem;font-weight:800;display:flex;justify-content:space-between;align-items:center}
 .cmp-tot-ya{background:var(--yab);color:var(--ya2)} .cmp-tot-ha{background:var(--hab);color:var(--ha2)}
 .cmp-frac{font-size:.64rem;color:var(--gray);font-weight:700;text-align:center;margin-top:6px}
+
+/* ── RIPPLE & TOAST ── */
+.rip{position:relative;overflow:hidden}
+.ripple{position:absolute;border-radius:50%;background:currentColor;opacity:.28;transform:scale(0);animation:rip .6s ease-out forwards;pointer-events:none}
+@keyframes rip{to{transform:scale(2.6);opacity:0}}
+#toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%) translateY(20px);background:#1b2a1b;color:#fff;
+  padding:11px 20px;border-radius:30px;font-size:.82rem;font-weight:700;box-shadow:0 8px 24px rgba(0,0,0,.32);
+  opacity:0;pointer-events:none;transition:.3s;z-index:60;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
@@ -198,10 +236,10 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
           <div class="inp-g"><label>🪣 Volume</label><input type="number" id="cmp-vol" value="3000" step="100" min="1" oninput="compare()"><div class="unit">litros</div></div>
         </div>
         <div class="quick-row">
-          <button class="qbtn" onclick="cmpVol(500)">500L</button>
-          <button class="qbtn" onclick="cmpVol(1000)">1000L</button>
-          <button class="qbtn" onclick="cmpVol(2000)">2000L</button>
-          <button class="qbtn on" onclick="cmpVol(3000)">3000L</button>
+          <button class="qbtn rip" onclick="cmpVol(500)">500L</button>
+          <button class="qbtn rip" onclick="cmpVol(1000)">1000L</button>
+          <button class="qbtn rip" onclick="cmpVol(2000)">2000L</button>
+          <button class="qbtn rip on" onclick="cmpVol(3000)">3000L</button>
         </div>
       </div>
       <div id="cmp-out"></div>
@@ -210,7 +248,7 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
     <!-- SOBRE -->
     <div class="screen" id="s-info">
       <div class="card">
-        <div class="card-ttl"><span class="ci">🥬</span>NFT Alface — v2.1</div>
+        <div class="card-ttl"><span class="ci">🥬</span>NFT Alface — v2.2</div>
         <div class="note" style="margin-bottom:14px">Cálculo de solução nutritiva para alface em NFT. Duas receitas de marcas diferentes, lidas direto das planilhas laminadas. <strong>dose = g(3000L) × ΔEC ÷ EC_base × (volume ÷ 3000)</strong>, com ΔEC = EC alvo − EC da água.</div>
         <span class="slbl">🔵 Alface Yara · EC base 1,41</span>
         <div style="font-size:.78rem;line-height:1.8;margin-bottom:12px;color:#445">
@@ -233,11 +271,12 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
   </div>
 
   <div id="bottomnav">
-    <button class="bnbtn on-ya" id="bn-yara" onclick="goTo('yara')"><span class="ico">🔵</span><span>Yara</span></button>
-    <button class="bnbtn" id="bn-haifa" onclick="goTo('haifa')"><span class="ico">🟣</span><span>Haifa</span></button>
-    <button class="bnbtn" id="bn-cmp" onclick="goTo('cmp')"><span class="ico">⚖️</span><span>Comparar</span></button>
-    <button class="bnbtn" id="bn-info" onclick="goTo('info')"><span class="ico">ℹ️</span><span>Sobre</span></button>
+    <button class="bnbtn rip on-ya" id="bn-yara" onclick="goTo('yara')"><span class="ico">🔵</span><span>Yara</span></button>
+    <button class="bnbtn rip" id="bn-haifa" onclick="goTo('haifa')"><span class="ico">🟣</span><span>Haifa</span></button>
+    <button class="bnbtn rip" id="bn-cmp" onclick="goTo('cmp')"><span class="ico">⚖️</span><span>Comparar</span></button>
+    <button class="bnbtn rip" id="bn-info" onclick="goTo('info')"><span class="ico">ℹ️</span><span>Sobre</span></button>
   </div>
+  <div id="toast"></div>
 </div>
 
 <script>
@@ -292,6 +331,17 @@ function nf(v){ return Number(v).toLocaleString('pt-BR'); }
 function val(id,dft){ const e=document.getElementById(id); const v=parseFloat(e&&e.value); return isNaN(v)?dft:v; }
 function allFerts(rec){ return rec.baldes.flatMap(b=>b.ferts); }
 function icon(rec){ return rec.tag==='ya'?'🔵':'🟣'; }
+let toastT; function toast(msg){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'),2200); }
+function fillSlider(rng){ if(!rng)return; const mn=+rng.min,mx=+rng.max,v=+rng.value; let p=((v-mn)/(mx-mn))*100; p=Math.max(0,Math.min(100,p)); rng.style.background=`linear-gradient(90deg,var(--gl) ${p}%, #e3e8e4 ${p}%)`; }
+
+// ── SINCRONIA NÚMERO ⇄ SLIDER ──
+function setF(rid,key,v){
+  const num=document.getElementById(rid+'-'+key), rng=document.getElementById(rid+'-'+key+'R');
+  if(num) num.value=v;
+  if(rng){ rng.value=v; fillSlider(rng); }
+  if(key==='vol') document.querySelectorAll('#p-'+rid+'-calc .qbtn').forEach(b=>b.classList.toggle('on',b.textContent===(+v)+'L'));
+  calcRec(rid);
+}
 
 // ── ABA DE RECEITA ──
 function buildRecipeScreen(rid){
@@ -303,25 +353,30 @@ function buildRecipeScreen(rid){
       <div class="rh-ec">⚡ EC base ${rec.ecBase.toFixed(2)} mS/cm · 3000 L${rec.baldes.length>1?' · 2 baldes':''}</div>
     </div>
     <div class="tab-row">
-      <button class="tab on" id="t-${rid}-calc" onclick="swTab('${rid}','calc')">⚗️ Calcular</button>
-      <button class="tab" id="t-${rid}-rec" onclick="swTab('${rid}','rec')">📋 Receita</button>
-      <button class="tab" id="t-${rid}-corr" onclick="swTab('${rid}','corr')">⚡ Correção</button>
-      <button class="tab" id="t-${rid}-tab" onclick="swTab('${rid}','tab')">📊 Tabela</button>
+      <button class="tab rip on" id="t-${rid}-calc" onclick="swTab('${rid}','calc')">⚗️ Calcular</button>
+      <button class="tab rip" id="t-${rid}-rec" onclick="swTab('${rid}','rec')">📋 Receita</button>
+      <button class="tab rip" id="t-${rid}-corr" onclick="swTab('${rid}','corr')">⚡ Correção</button>
+      <button class="tab rip" id="t-${rid}-tab" onclick="swTab('${rid}','tab')">📊 Tabela</button>
     </div>
 
     <div id="p-${rid}-calc">
       <div class="card">
         <div class="card-ttl"><span class="ci">⚗️</span>Calcular doses</div>
         <div class="inp-grid">
-          <div class="inp-g"><label>💧 EC água</label><input type="number" id="${rid}-agua" value="0.0" step="0.01" min="0" oninput="calcRec('${rid}')"><div class="unit">mS/cm</div></div>
-          <div class="inp-g"><label>🎯 EC alvo</label><input type="number" id="${rid}-alvo" value="${rec.ecAlvo}" step="0.01" min="0.1" oninput="calcRec('${rid}')"><div class="unit">mS/cm</div></div>
-          <div class="inp-g"><label>🪣 Volume</label><input type="number" id="${rid}-vol" value="3000" step="100" min="1" oninput="calcRec('${rid}')"><div class="unit">litros</div></div>
+          <div class="inp-g"><label>💧 EC água</label><input type="number" id="${rid}-agua" value="0.0" step="0.01" min="0" oninput="setF('${rid}','agua',this.value)"><div class="unit">mS/cm</div></div>
+          <div class="inp-g"><label>🎯 EC alvo</label><input type="number" id="${rid}-alvo" value="${rec.ecAlvo}" step="0.01" min="0.1" oninput="setF('${rid}','alvo',this.value)"><div class="unit">mS/cm</div></div>
+          <div class="inp-g"><label>🪣 Volume</label><input type="number" id="${rid}-vol" value="3000" step="100" min="1" oninput="setF('${rid}','vol',this.value)"><div class="unit">litros</div></div>
+        </div>
+        <div class="sliders">
+          <div class="sld-row"><span class="sld-l">💧 Água</span><input type="range" class="slider" id="${rid}-aguaR" min="0" max="2" step="0.01" value="0" oninput="setF('${rid}','agua',this.value)"></div>
+          <div class="sld-row"><span class="sld-l">🎯 Alvo</span><input type="range" class="slider" id="${rid}-alvoR" min="0.3" max="3" step="0.01" value="${rec.ecAlvo}" oninput="setF('${rid}','alvo',this.value)"></div>
+          <div class="sld-row"><span class="sld-l">🪣 Volume</span><input type="range" class="slider" id="${rid}-volR" min="100" max="5000" step="50" value="3000" oninput="setF('${rid}','vol',this.value)"></div>
         </div>
         <div class="quick-row">
-          <button class="qbtn" onclick="setRecVol('${rid}',500)">500L</button>
-          <button class="qbtn" onclick="setRecVol('${rid}',1000)">1000L</button>
-          <button class="qbtn" onclick="setRecVol('${rid}',2000)">2000L</button>
-          <button class="qbtn on" onclick="setRecVol('${rid}',3000)">3000L</button>
+          <button class="qbtn rip" onclick="setRecVol('${rid}',500)">500L</button>
+          <button class="qbtn rip" onclick="setRecVol('${rid}',1000)">1000L</button>
+          <button class="qbtn rip" onclick="setRecVol('${rid}',2000)">2000L</button>
+          <button class="qbtn rip on" onclick="setRecVol('${rid}',3000)">3000L</button>
         </div>
       </div>
       <div id="${rid}-calc-out"></div>
@@ -330,8 +385,8 @@ function buildRecipeScreen(rid){
     <div id="p-${rid}-rec" style="display:none">
       <div class="card">
         <div class="card-ttl"><span class="ci">📋</span>Receita cheia · EC ${rec.ecBase.toFixed(2)}</div>
-        <div class="vol-row"><span class="vl">Volume</span><button class="vol-btn" onclick="adjRecVol('${rid}','rec',-100)">−</button>
-          <input class="vol-inp" id="${rid}-rvol" type="number" value="3000" oninput="recRec('${rid}')"><span style="font-size:.78rem;color:var(--gray)">L</span></div>
+        <div class="vol-row"><span class="vl">Volume</span><button class="vol-btn rip" onclick="adjRecVol('${rid}','rec',-100)">−</button>
+          <input class="vol-inp" id="${rid}-rvol" type="number" value="3000" oninput="recRec('${rid}')"><button class="vol-btn rip" onclick="adjRecVol('${rid}','rec',100)">+</button><span style="font-size:.78rem;color:var(--gray)">L</span></div>
       </div>
       <div id="${rid}-rec-out"></div>
       <div class="card"><div class="card-ttl"><span class="ci">📝</span>Passo a passo</div><div class="steps" id="${rid}-rec-steps"></div></div>
@@ -345,8 +400,8 @@ function buildRecipeScreen(rid){
           <div class="inp-g"><label>EC atual</label><input type="number" id="${rid}-cAt" value="1.0" step="0.01" oninput="corrRec('${rid}')"><div class="unit">mS/cm</div></div>
           <div class="inp-g"><label>EC desejado</label><input type="number" id="${rid}-cDs" value="${rec.ecAlvo}" step="0.01" oninput="corrRec('${rid}')"><div class="unit">mS/cm</div></div>
         </div>
-        <div class="vol-row"><span class="vl">Volume</span><button class="vol-btn" onclick="adjRecVol('${rid}','corr',-100)">−</button>
-          <input class="vol-inp" id="${rid}-cvol" type="number" value="3000" oninput="corrRec('${rid}')"><span style="font-size:.78rem;color:var(--gray)">L</span></div>
+        <div class="vol-row"><span class="vl">Volume</span><button class="vol-btn rip" onclick="adjRecVol('${rid}','corr',-100)">−</button>
+          <input class="vol-inp" id="${rid}-cvol" type="number" value="3000" oninput="corrRec('${rid}')"><button class="vol-btn rip" onclick="adjRecVol('${rid}','corr',100)">+</button><span style="font-size:.78rem;color:var(--gray)">L</span></div>
       </div>
       <div id="${rid}-corr-out"></div>
     </div>
@@ -354,8 +409,8 @@ function buildRecipeScreen(rid){
     <div id="p-${rid}-tab" style="display:none">
       <div class="card" style="padding:0;overflow:hidden">
         <div style="padding:16px 16px 6px;font-size:.8rem;font-weight:800">📊 Gramas em <span id="${rid}-tvol-lbl">3000</span> L por ΔEC</div>
-        <div class="vol-row" style="padding:0 16px 12px;margin:0"><button class="vol-btn" onclick="adjRecVol('${rid}','tab',-100)">−</button>
-          <input class="vol-inp" id="${rid}-tvol" type="number" value="3000" oninput="tabRec('${rid}')"><span style="font-size:.78rem;color:var(--gray)">L</span></div>
+        <div class="vol-row" style="padding:0 16px 12px;margin:0"><button class="vol-btn rip" onclick="adjRecVol('${rid}','tab',-100)">−</button>
+          <input class="vol-inp" id="${rid}-tvol" type="number" value="3000" oninput="tabRec('${rid}')"><button class="vol-btn rip" onclick="adjRecVol('${rid}','tab',100)">+</button><span style="font-size:.78rem;color:var(--gray)">L</span></div>
         <div class="tbl-wrap" id="${rid}-tab-out"></div>
       </div>
     </div>`;
@@ -363,8 +418,8 @@ function buildRecipeScreen(rid){
 
 // ── LINHA DE FERTILIZANTE (com barra de proporção) ──
 function fertRowHTML(f,t,vol,maxG){
-  const pct = maxG ? Math.max(7, Math.round(f._g/maxG*100)) : 0;
-  const bar = maxG ? `<div class="fert-bar"><i class="bar-${t}" style="width:${pct}%"></i></div>` : '';
+  const s = maxG ? Math.max(.07, f._g/maxG).toFixed(3) : 1;
+  const bar = maxG ? `<div class="fert-bar"><i class="bar-${t}" style="--s:${s}"></i></div>` : '';
   const micro = f.micro ? '<span class="tagm">micro</span>' : '';
   const sub = vol ? `<div class="fert-sub">${(f._g/vol*1000).toFixed(1)} mg/L</div>` : '';
   return `<div class="fert-row">
@@ -387,22 +442,24 @@ function baldeBlocksHTML(rec,frac,vol){
 }
 
 // ── CALCULAR ──
-function calcRec(rid){
+function calcRec(rid, animate){
   const rec=RECIPES[rid], t=rec.tag;
   const agua=val(rid+'-agua',0), alvo=val(rid+'-alvo',rec.ecAlvo), vol=Math.max(1,val(rid+'-vol',3000));
   const delta=alvo-agua, out=document.getElementById(rid+'-calc-out');
+  out.className = animate ? 'res-anim' : '';
   if(delta<=0){
     const litros=(vol*(agua/alvo-1)).toFixed(0);
     out.innerHTML=`<div class="alrt alrt-w"><span class="ai">⚠️</span><div>EC da água (${agua.toFixed(2)}) ≥ EC alvo (${alvo.toFixed(2)}). Não adicione fertilizante.<br>💧 Para baixar até ${alvo.toFixed(2)} em ${nf(vol)} L, adicione <strong>${nf(litros)} L de água pura</strong>.</div></div>`;
     return;
   }
-  const frac=delta/rec.ecBase, pctBar=Math.min(frac,1)*100;
-  let html=`<div class="ec-badge">
+  const frac=delta/rec.ecBase, sBar=Math.min(frac,1).toFixed(3);
+  let html=`<button class="share-btn rip" onclick="shareRec('${rid}')">📤 Enviar / copiar receita</button>
+  <div class="ec-badge">
     <div class="ecb-top">
       <div><div class="ecb-lbl">EC final da solução</div><div class="ecb-num">${alvo.toFixed(2)}<small>mS/cm</small></div></div>
       <div class="ecb-side">💧 água ${agua.toFixed(2)}<br>🧪 ferts +${delta.toFixed(2)}</div>
     </div>
-    <div class="ecb-prog"><i style="width:${pctBar}%"></i></div>
+    <div class="ecb-prog"><i style="--s:${sBar}"></i></div>
     <div class="ecb-pct">${(frac*100).toFixed(0)}% da receita cheia</div>
   </div>`;
   if(frac>1.15) html+=`<div class="alrt alrt-w"><span class="ai">⚠️</span><div>Fração ${(frac*100).toFixed(0)}% — acima da receita cheia. Confira o EC alvo (máx. útil ≈ ${(rec.ecBase+agua).toFixed(2)}).</div></div>`;
@@ -428,6 +485,23 @@ function stepsHTML(rec,frac,vol,agua,alvo){
   }
   s+=`<div class="step"><strong>Complete e ajuste</strong><p>Complete até ${nf(vol)} L. pH 5,8–6,2. EC esperado: <strong>${alvo.toFixed(2)} mS/cm</strong>.</p></div>`;
   return s;
+}
+
+// ── ENVIAR / COPIAR ──
+function shareRec(rid){
+  const rec=RECIPES[rid];
+  const agua=val(rid+'-agua',0), alvo=val(rid+'-alvo',rec.ecAlvo), vol=Math.max(1,val(rid+'-vol',3000));
+  const delta=alvo-agua; if(delta<=0){ toast('Ajuste o EC alvo primeiro'); return; }
+  const frac=delta/rec.ecBase;
+  let txt=`🥬 ${rec.nome} — ${nf(vol)} L\n🎯 EC alvo ${alvo.toFixed(2)} (água ${agua.toFixed(2)}) mS/cm\n`;
+  rec.baldes.forEach(b=>{
+    if(rec.baldes.length>1) txt+=`\n${b.nome}:`;
+    b.ferts.forEach(f=>{ txt+=`\n• ${f.nome}: ${fmtG(f.g*frac*(vol/REF_VOL))}`; });
+  });
+  txt+=`\n\n⚠️ Cálcio dissolvido separado. pH 5,8–6,2.`;
+  if(navigator.share){ navigator.share({title:rec.nome,text:txt}).catch(()=>{}); }
+  else if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(()=>toast('📋 Receita copiada!')).catch(()=>toast('Não foi possível copiar')); }
+  else toast('Compartilhamento indisponível');
 }
 
 // ── RECEITA CHEIA ──
@@ -508,31 +582,45 @@ const LBL={yara:'Yara',haifa:'Haifa',cmp:'Comparar',info:'Sobre'};
 function goTo(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('s-'+id).classList.add('active');
-  document.querySelectorAll('.bnbtn').forEach(b=>b.className='bnbtn');
+  document.querySelectorAll('.bnbtn').forEach(b=>b.className='bnbtn rip');
   const onCls=id==='yara'?'on-ya':id==='haifa'?'on-ha':'on-g';
   document.getElementById('bn-'+id).classList.add(onCls);
   document.getElementById('scrLbl').textContent=LBL[id];
   document.getElementById('content').scrollTop=0;
-  if(id==='yara'||id==='haifa') calcRec(id);
+  if(id==='yara'||id==='haifa') calcRec(id,true);
   if(id==='cmp') compare();
 }
 function swTab(rid,tab){
   ['calc','rec','corr','tab'].forEach(p=>{document.getElementById('p-'+rid+'-'+p).style.display='none';document.getElementById('t-'+rid+'-'+p).classList.remove('on');});
   document.getElementById('p-'+rid+'-'+tab).style.display='block';
   document.getElementById('t-'+rid+'-'+tab).classList.add('on');
-  if(tab==='calc')calcRec(rid); else if(tab==='rec')recRec(rid); else if(tab==='corr')corrRec(rid); else if(tab==='tab')tabRec(rid);
+  if(tab==='calc')calcRec(rid,true); else if(tab==='rec')recRec(rid); else if(tab==='corr')corrRec(rid); else if(tab==='tab')tabRec(rid);
 }
-function setRecVol(rid,v){ document.getElementById(rid+'-vol').value=v; document.querySelectorAll('#p-'+rid+'-calc .qbtn').forEach(b=>b.classList.toggle('on',b.textContent===v+'L')); calcRec(rid); }
+function setRecVol(rid,v){ setF(rid,'vol',v); }
 function adjRecVol(rid,which,d){
   const map={rec:rid+'-rvol',corr:rid+'-cvol',tab:rid+'-tvol'}, el=document.getElementById(map[which]);
   el.value=Math.max(1,(parseFloat(el.value)||3000)+d);
   if(which==='rec')recRec(rid); else if(which==='corr')corrRec(rid); else if(which==='tab')tabRec(rid);
 }
 
+// ── RIPPLE (delegação) ──
+document.addEventListener('pointerdown',function(e){
+  const el=e.target.closest('.rip'); if(!el)return;
+  const rect=el.getBoundingClientRect(), size=Math.max(rect.width,rect.height);
+  const r=document.createElement('span'); r.className='ripple';
+  r.style.width=r.style.height=size+'px';
+  r.style.left=(e.clientX-rect.left-size/2)+'px';
+  r.style.top=(e.clientY-rect.top-size/2)+'px';
+  el.appendChild(r); setTimeout(()=>r.remove(),600);
+});
+
 // ── INIT ──
 window.onload=function(){
   buildRecipeScreen('yara'); buildRecipeScreen('haifa');
-  ['yara','haifa'].forEach(rid=>{ calcRec(rid); recRec(rid); corrRec(rid); tabRec(rid); });
+  ['yara','haifa'].forEach(rid=>{
+    ['agua','alvo','vol'].forEach(k=>fillSlider(document.getElementById(rid+'-'+k+'R')));
+    calcRec(rid,true); recRec(rid); corrRec(rid); tabRec(rid);
+  });
   compare();
 };
 </script>
