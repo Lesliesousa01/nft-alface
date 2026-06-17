@@ -180,6 +180,12 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
 
 .note{font-size:.75rem;background:#f4f7f4;border:1px solid var(--line);border-radius:13px;padding:12px 14px;line-height:1.55;margin-top:11px;color:#5a6b5e}
 .slbl{font-size:.7rem;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px;display:block}
+.howto{background:var(--gbg);border:1px solid #c8e6c9;border-radius:14px;padding:12px 14px;font-size:.77rem;line-height:1.5;color:#2c4a2e;margin-bottom:13px}
+.howto b{color:var(--g2)}
+.season{margin-top:11px;border-radius:14px;padding:11px 13px;font-size:.76rem;line-height:1.45;display:flex;align-items:center;gap:10px;background:#eef4ff;border:1px solid #cfe0f5;color:#123a6b}
+.season.summer{background:#fff7e8;border-color:#ffe2b0;color:#7a4d00}
+.season .sbtn{margin-left:auto;flex-shrink:0;border:none;background:var(--g);color:#fff;font-weight:800;font-size:.72rem;padding:8px 12px;border-radius:11px;cursor:pointer}
+.season .sbtn:active{transform:scale(.96)}
 
 /* ── TABELA ── */
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:0 0 18px 18px}
@@ -248,7 +254,7 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
     <!-- SOBRE -->
     <div class="screen" id="s-info">
       <div class="card">
-        <div class="card-ttl"><span class="ci">🥬</span>NFT Alface — v2.3</div>
+        <div class="card-ttl"><span class="ci">🥬</span>NFT Alface — v2.4</div>
         <div class="note" style="margin-bottom:14px">Cálculo de solução nutritiva para alface em NFT. Duas receitas de marcas diferentes, lidas direto das planilhas laminadas. <strong>dose = g(3000L) × ΔEC ÷ EC_base × (volume ÷ 3000)</strong>, com ΔEC = EC alvo − EC da água.</div>
         <span class="slbl">🔵 Alface Yara · EC base 1,41</span>
         <div style="font-size:.78rem;line-height:1.8;margin-bottom:12px;color:#445">
@@ -339,8 +345,23 @@ function setF(rid,key,v){
   const num=document.getElementById(rid+'-'+key), rng=document.getElementById(rid+'-'+key+'R');
   if(num) num.value=v;
   if(rng){ rng.value=v; fillSlider(rng); }
-  if(key==='vol') document.querySelectorAll('#p-'+rid+'-calc .qbtn').forEach(b=>b.classList.toggle('on',b.textContent===(+v)+'L'));
+  if(key==='vol') document.querySelectorAll('#'+rid+'-volpreset .qbtn').forEach(b=>b.classList.toggle('on',b.textContent===(+v)+'L'));
+  if(key==='alvo'){ const el=document.getElementById(rid+'-ecpreset'); if(el) el.querySelectorAll('.qbtn').forEach(b=>b.classList.toggle('on',Math.abs(+b.dataset.ec-(+v))<0.005)); }
   calcRec(rid);
+}
+
+// ── ESTAÇÃO (Brasil / Hemisfério Sul) → sugestão de EC alvo ──
+function getSeason(){
+  const m=new Date().getMonth(); // 0=jan
+  if([11,0,1].includes(m)) return {nome:'Verão',emoji:'☀️',ec:1.30,summer:true,msg:'dias quentes — costuma-se mirar <b>abaixo de 1,41</b> (ex.: 1,30) para a planta não sofrer'};
+  if([5,6,7].includes(m))  return {nome:'Inverno',emoji:'❄️',ec:1.60,summer:false,msg:'dias frios — costuma-se <b>subir o EC para ~1,6</b>'};
+  if([2,3,4].includes(m))  return {nome:'Outono',emoji:'🍂',ec:1.41,summer:false,msg:'clima ameno — EC padrão ~1,41'};
+  return {nome:'Primavera',emoji:'🌱',ec:1.41,summer:false,msg:'clima ameno — EC padrão ~1,41'};
+}
+function renderSeason(rid){
+  const s=getSeason(), el=document.getElementById(rid+'-season'); if(!el)return;
+  el.className='season'+(s.summer?' summer':'');
+  el.innerHTML=`<span style="font-size:1.3rem">${s.emoji}</span><div><b>${s.nome}</b> (hoje): ${s.msg}.</div><button class="sbtn rip" onclick="setF('${rid}','alvo',${s.ec})">Usar ${s.ec.toFixed(2).replace('.',',')}</button>`;
 }
 
 // ── ABA DE RECEITA ──
@@ -360,6 +381,7 @@ function buildRecipeScreen(rid){
     </div>
 
     <div id="p-${rid}-calc">
+      <div class="howto">🆕 <b>Calcular</b> = preparar a solução do <b>zero</b> (tanque novo ou vazio). Informe a água, o EC alvo e o volume — o app diz quanto de cada adubo colocar.</div>
       <div class="card">
         <div class="card-ttl"><span class="ci">⚗️</span>Calcular doses</div>
         <div class="inp-grid">
@@ -372,7 +394,15 @@ function buildRecipeScreen(rid){
           <div class="sld-row"><span class="sld-l">🎯 Alvo</span><input type="range" class="slider" id="${rid}-alvoR" min="0.3" max="3" step="0.01" value="${rec.ecAlvo}" oninput="setF('${rid}','alvo',this.value)"></div>
           <div class="sld-row"><span class="sld-l">🪣 Volume</span><input type="range" class="slider" id="${rid}-volR" min="100" max="5000" step="50" value="3000" oninput="setF('${rid}','vol',this.value)"></div>
         </div>
-        <div class="quick-row">
+        <div style="font-size:.68rem;font-weight:700;color:var(--gray);margin:13px 0 7px;letter-spacing:.3px">🎯 EC ALVO RÁPIDO (por estação)</div>
+        <div class="quick-row" id="${rid}-ecpreset">
+          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1.30)<.005?'on':''}" data-ec="1.30" onclick="setF('${rid}','alvo',1.30)">☀️ 1,30</button>
+          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1.41)<.005?'on':''}" data-ec="1.41" onclick="setF('${rid}','alvo',1.41)">🌤️ 1,41</button>
+          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1.60)<.005?'on':''}" data-ec="1.60" onclick="setF('${rid}','alvo',1.60)">❄️ 1,60</button>
+        </div>
+        <div class="season" id="${rid}-season"></div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--gray);margin:13px 0 7px;letter-spacing:.3px">🪣 VOLUME</div>
+        <div class="quick-row" id="${rid}-volpreset">
           <button class="qbtn rip" onclick="setRecVol('${rid}',500)">500L</button>
           <button class="qbtn rip" onclick="setRecVol('${rid}',1000)">1000L</button>
           <button class="qbtn rip" onclick="setRecVol('${rid}',2000)">2000L</button>
@@ -393,9 +423,9 @@ function buildRecipeScreen(rid){
     </div>
 
     <div id="p-${rid}-corr" style="display:none">
+      <div class="howto">🔧 <b>Correção</b> = o tanque <b>já está rodando</b> e o EC saiu do lugar. Informe o EC de agora e o que você quer — o app diz quanto <b>adicionar</b> (se o EC baixou) ou quanta <b>água</b> colocar (se subiu).</div>
       <div class="card">
         <div class="card-ttl"><span class="ci">⚡</span>Correção de EC</div>
-        <div class="note" style="margin:0 0 14px">EC do tanque desviou? Informe o atual e o desejado para saber quanto adicionar — ou quantos litros de água diluir.</div>
         <div class="inp-grid g2">
           <div class="inp-g"><label>EC atual</label><input type="number" id="${rid}-cAt" value="1.0" step="0.01" oninput="corrRec('${rid}')"><div class="unit">mS/cm</div></div>
           <div class="inp-g"><label>EC desejado</label><input type="number" id="${rid}-cDs" value="${rec.ecAlvo}" step="0.01" oninput="corrRec('${rid}')"><div class="unit">mS/cm</div></div>
@@ -620,6 +650,7 @@ window.onload=function(){
   buildRecipeScreen('yara'); buildRecipeScreen('haifa');
   ['yara','haifa'].forEach(rid=>{
     ['agua','alvo','vol'].forEach(k=>fillSlider(document.getElementById(rid+'-'+k+'R')));
+    renderSeason(rid);
     calcRec(rid,true); recRec(rid); corrRec(rid); tabRec(rid);
   });
   compare();
