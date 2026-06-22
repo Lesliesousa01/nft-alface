@@ -272,8 +272,8 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
       <div class="card">
         <div class="card-ttl"><span class="ci">⚖️</span>Comparar Yara × Haifa</div>
         <div class="inp-grid">
-          <div class="inp-g"><label>💧 EC água</label><input type="number" id="cmp-agua" value="0.0" step="0.01" min="0" oninput="compare()"><div class="unit">mS/cm</div></div>
-          <div class="inp-g"><label>🎯 EC alvo</label><input type="number" id="cmp-alvo" value="1.41" step="0.01" min="0.1" oninput="compare()"><div class="unit">mS/cm</div></div>
+          <div class="inp-g"><label>💧 EC água</label><input type="number" id="cmp-agua" value="0" step="10" min="0" oninput="compare()"><div class="unit">µS/cm</div></div>
+          <div class="inp-g"><label>🎯 EC alvo</label><input type="number" id="cmp-alvo" value="1410" step="10" min="100" oninput="compare()"><div class="unit">µS/cm</div></div>
           <div class="inp-g"><label>🪣 Volume</label><input type="number" id="cmp-vol" value="3000" step="100" min="1" oninput="compare()"><div class="unit">litros</div></div>
         </div>
         <div class="quick-row">
@@ -289,13 +289,13 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
     <!-- SOBRE -->
     <div class="screen" id="s-info">
       <div class="card">
-        <div class="card-ttl"><span class="ci">🥬</span>NFT Alface — v2.7</div>
+        <div class="card-ttl"><span class="ci">🥬</span>NFT Alface — v2.8</div>
         <div class="note" style="margin-bottom:14px">Cálculo de solução nutritiva para alface em NFT. Duas receitas de marcas diferentes, lidas direto das planilhas laminadas. <strong>dose = g(3000L) × ΔEC ÷ EC_base × (volume ÷ 3000)</strong>, com ΔEC = EC alvo − EC da água.</div>
-        <span class="slbl">🔵 Alface Yara · EC base 1,41</span>
+        <span class="slbl">🔵 Alface Yara · EC base 1.410 µS/cm</span>
         <div style="font-size:.78rem;line-height:1.8;margin-bottom:12px;color:#445">
           Calcinit 907 · Yara Rega NK 528 · Krista-K 45 1296 · Krista-MAG 350 · Krista-MKP 285 · Rexolin Q48 67 · Rexolin CXK 39 <span style="color:var(--gray)">(g/3000 L, receita cheia)</span>
         </div>
-        <span class="slbl">🟣 Alface Haifa · EC base ≈1,30</span>
+        <span class="slbl">🟣 Alface Haifa · EC base ≈1.300 µS/cm</span>
         <div style="font-size:.78rem;line-height:1.8;margin-bottom:12px;color:#445">
           <strong>Balde A:</strong> Nit. Cálcio 1260 · Móvel Ca 60 · Fetri Combi 45 · Basafer 57<br>
           <strong>Balde B:</strong> NPK 13-02-44 780 · Sulf. Magnésio 690 · Nitr. Magnésio 180 · MKP 360
@@ -304,7 +304,7 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
         <div style="font-size:.74rem;color:var(--gray);line-height:1.75">
           • Dissolver o nitrato de cálcio <strong>separado</strong> dos fosfatos.<br>
           • Na Haifa, diluir o Balde A no reservatório antes do Balde B.<br>
-          • A recomendação <strong>🌡️ pelo clima de agora</strong> (abas Calcular/Correção) usa a temperatura real do seu local via Open-Meteo: ≥28°C → EC 1,30 · 18–28°C → 1,41 · &lt;18°C → 1,60. Sem internet/permissão, volta pra sugestão por estação.<br>
+          • A recomendação <strong>🌡️ pelo clima de agora</strong> (abas Calcular/Correção) usa a temperatura real do seu local via Open-Meteo: ≥28°C → EC 1.300 · 18–28°C → 1.410 · &lt;18°C → 1.600 µS/cm. Sem internet/permissão, volta pra sugestão por estação.<br>
           • pH alvo: 5,8–6,2. Em breve: histórico de preparo e custo por marca.
         </div>
       </div>
@@ -327,7 +327,7 @@ const RECIPES = {
   yara: {
     nome:'Alface Yara', tag:'ya',
     sub:'Calcinit · Yara Rega · Krista-K · Krista-MAG · Krista-MKP · Rexolin',
-    ecBase:1.41, ecAlvo:1.41,
+    ecBase:1410, ecAlvo:1410,
     baldes:[
       {id:'A', nome:'Balde A', ferts:[
         {nome:'Calcinit',      fml:'Ca(NO₃)₂·4H₂O',     g:907,  first:true},
@@ -343,7 +343,7 @@ const RECIPES = {
   haifa: {
     nome:'Alface Haifa', tag:'ha',
     sub:'Nit. Cálcio · Móvel Ca · Fetri Combi · Basafer + NPK · Mg',
-    ecBase:1.278, ecAlvo:1.30,
+    ecBase:1278, ecAlvo:1300,
     baldes:[
       {id:'A', nome:'Balde A', ferts:[
         {nome:'Nitrato de Cálcio', fml:'Ca(NO₃)₂',  g:1260, first:true},
@@ -370,6 +370,7 @@ function fmtG(g){
   return g.toFixed(0)+' g';
 }
 function nf(v){ return Number(v).toLocaleString('pt-BR'); }
+function ecf(v){ return nf(Math.round(v)); }  // EC em µS/cm com ponto de milhar
 function val(id,dft){ const e=document.getElementById(id); const v=parseFloat(e&&e.value); return isNaN(v)?dft:v; }
 function allFerts(rec){ return rec.baldes.flatMap(b=>b.ferts); }
 function icon(rec){ return rec.tag==='ya'?'🔵':'🟣'; }
@@ -382,20 +383,20 @@ function setF(rid,key,v){
   if(num) num.value=v;
   if(rng){ rng.value=v; fillSlider(rng); }
   if(key==='vol') document.querySelectorAll('#'+rid+'-volpreset .qbtn').forEach(b=>b.classList.toggle('on',b.textContent===(+v)+'L'));
-  if(key==='alvo'){ const el=document.getElementById(rid+'-ecpreset'); if(el) el.querySelectorAll('.qbtn').forEach(b=>b.classList.toggle('on',Math.abs(+b.dataset.ec-(+v))<0.005)); }
+  if(key==='alvo'){ const el=document.getElementById(rid+'-ecpreset'); if(el) el.querySelectorAll('.qbtn').forEach(b=>b.classList.toggle('on',Math.abs(+b.dataset.ec-(+v))<5)); }
   calcRec(rid);
 }
 
 // ── ESTAÇÃO (Brasil / Hemisfério Sul) → sugestão de EC alvo ──
 function getSeason(){
   const m=new Date().getMonth(); // 0=jan
-  if([11,0,1].includes(m)) return {nome:'Verão',emoji:'☀️',ec:1.30,summer:true,msg:'dias quentes — costuma-se mirar <b>abaixo de 1,41</b> (ex.: 1,30) para a planta não sofrer'};
-  if([5,6,7].includes(m))  return {nome:'Inverno',emoji:'❄️',ec:1.60,summer:false,msg:'dias frios — costuma-se <b>subir o EC para ~1,6</b>'};
-  if([2,3,4].includes(m))  return {nome:'Outono',emoji:'🍂',ec:1.41,summer:false,msg:'clima ameno — EC padrão ~1,41'};
-  return {nome:'Primavera',emoji:'🌱',ec:1.41,summer:false,msg:'clima ameno — EC padrão ~1,41'};
+  if([11,0,1].includes(m)) return {nome:'Verão',emoji:'☀️',ec:1300,summer:true,msg:'dias quentes — costuma-se mirar <b>abaixo de 1.410</b> (ex.: 1.300) para a planta não sofrer'};
+  if([5,6,7].includes(m))  return {nome:'Inverno',emoji:'❄️',ec:1600,summer:false,msg:'dias frios — costuma-se <b>subir o EC para ~1.600</b>'};
+  if([2,3,4].includes(m))  return {nome:'Outono',emoji:'🍂',ec:1410,summer:false,msg:'clima ameno — EC padrão ~1.410'};
+  return {nome:'Primavera',emoji:'🌱',ec:1410,summer:false,msg:'clima ameno — EC padrão ~1.410'};
 }
 function renderSeason(rid){
-  const s=getSeason(), ecBr=s.ec.toFixed(2).replace('.',',');
+  const s=getSeason(), ecBr=nf(s.ec);
   const cal=document.getElementById(rid+'-season');
   if(cal){ cal.className='season'+(s.summer?' summer':''); cal.innerHTML=`<span style="font-size:1.3rem">${s.emoji}</span><div><b>${s.nome}</b> (hoje): ${s.msg}.</div><button class="sbtn rip" onclick="setF('${rid}','alvo',${s.ec})">Usar ${ecBr}</button>`; }
   const cor=document.getElementById(rid+'-cseason');
@@ -406,9 +407,9 @@ function setCorrDs(rid,v){ document.getElementById(rid+'-cDs').value=v; corrRec(
 // ── CLIMA AO VIVO → recomendação de EC pela temperatura atual do local ──
 let WEATHER=null, WX_STATE='loading';
 function ecFromTemp(t){
-  if(t>=28) return {ec:1.30,nome:'Quente',emoji:'☀️',cls:'wx-hot', msg:'calor — mire <b>EC 1,30</b> pra alface não sofrer'};
-  if(t>=18) return {ec:1.41,nome:'Ameno', emoji:'🌤️',cls:'wx-mild',msg:'clima ameno — <b>EC 1,41</b> padrão'};
-  return            {ec:1.60,nome:'Frio',  emoji:'❄️',cls:'wx-cold',msg:'frio — pode <b>subir o EC pra ~1,60</b>'};
+  if(t>=28) return {ec:1300,nome:'Quente',emoji:'☀️',cls:'wx-hot', msg:'calor — mire <b>EC 1.300</b> pra alface não sofrer'};
+  if(t>=18) return {ec:1410,nome:'Ameno', emoji:'🌤️',cls:'wx-mild',msg:'clima ameno — <b>EC 1.410</b> padrão'};
+  return            {ec:1600,nome:'Frio',  emoji:'❄️',cls:'wx-cold',msg:'frio — pode <b>subir o EC pra ~1.600</b>'};
 }
 function fetchJSON(url,ms){
   const c=new AbortController(), id=setTimeout(()=>c.abort(),ms||8000);
@@ -446,7 +447,7 @@ function renderWeather(){
         el.innerHTML=`<span class="wx-emoji">📍</span><div class="wx-body">Não consegui o clima agora — usando a sugestão por estação.</div><button class="wx-retry rip" onclick="fetchWeather()">↻</button>`;
         if(seas) seas.style.display='';
       } else {
-        const w=WEATHER, ecBr=w.ec.toFixed(2).replace('.',','), place=w.city?` · 📍 ${w.city}`:'';
+        const w=WEATHER, ecBr=nf(w.ec), place=w.city?` · 📍 ${w.city}`:'';
         const click=o.corr?`setCorrDs('${rid}',${w.ec})`:`setF('${rid}','alvo',${w.ec})`;
         el.className='wx '+w.cls;
         el.innerHTML=`<span class="wx-emoji">${w.emoji}</span>
@@ -466,7 +467,7 @@ function buildRecipeScreen(rid){
     <div class="rec-hdr rec-hdr-${t}">
       <div class="rh-t">${icon(rec)} ${rec.nome}</div>
       <div class="rh-s">${rec.sub}</div>
-      <div class="rh-ec">⚡ EC base ${rec.ecBase.toFixed(2)} mS/cm · 3000 L${rec.baldes.length>1?' · 2 baldes':''}</div>
+      <div class="rh-ec">⚡ EC base ${ecf(rec.ecBase)} µS/cm · 3000 L${rec.baldes.length>1?' · 2 baldes':''}</div>
     </div>
     <div class="tab-row">
       <button class="tab rip on" id="t-${rid}-corr" onclick="swTab('${rid}','corr')">⚡ Correção</button>
@@ -480,22 +481,22 @@ function buildRecipeScreen(rid){
       <div class="card">
         <div class="card-ttl"><span class="ci">⚗️</span>Calcular doses</div>
         <div class="inp-grid">
-          <div class="inp-g"><label>💧 EC água</label><input type="number" id="${rid}-agua" value="0.0" step="0.01" min="0" oninput="setF('${rid}','agua',this.value)"><div class="unit">mS/cm</div></div>
-          <div class="inp-g"><label>🎯 EC alvo</label><input type="number" id="${rid}-alvo" value="${rec.ecAlvo}" step="0.01" min="0.1" oninput="setF('${rid}','alvo',this.value)"><div class="unit">mS/cm</div></div>
+          <div class="inp-g"><label>💧 EC água</label><input type="number" id="${rid}-agua" value="0" step="10" min="0" oninput="setF('${rid}','agua',this.value)"><div class="unit">µS/cm</div></div>
+          <div class="inp-g"><label>🎯 EC alvo</label><input type="number" id="${rid}-alvo" value="${rec.ecAlvo}" step="10" min="100" oninput="setF('${rid}','alvo',this.value)"><div class="unit">µS/cm</div></div>
           <div class="inp-g"><label>🪣 Volume</label><input type="number" id="${rid}-vol" value="3000" step="100" min="1" oninput="setF('${rid}','vol',this.value)"><div class="unit">litros</div></div>
         </div>
         <div class="sliders">
-          <div class="sld-row"><span class="sld-l">💧 Água</span><input type="range" class="slider" id="${rid}-aguaR" min="0" max="2" step="0.01" value="0" oninput="setF('${rid}','agua',this.value)"></div>
-          <div class="sld-row"><span class="sld-l">🎯 Alvo</span><input type="range" class="slider" id="${rid}-alvoR" min="0.3" max="3" step="0.01" value="${rec.ecAlvo}" oninput="setF('${rid}','alvo',this.value)"></div>
+          <div class="sld-row"><span class="sld-l">💧 Água</span><input type="range" class="slider" id="${rid}-aguaR" min="0" max="2000" step="10" value="0" oninput="setF('${rid}','agua',this.value)"></div>
+          <div class="sld-row"><span class="sld-l">🎯 Alvo</span><input type="range" class="slider" id="${rid}-alvoR" min="300" max="3000" step="10" value="${rec.ecAlvo}" oninput="setF('${rid}','alvo',this.value)"></div>
           <div class="sld-row"><span class="sld-l">🪣 Volume</span><input type="range" class="slider" id="${rid}-volR" min="100" max="5000" step="50" value="3000" oninput="setF('${rid}','vol',this.value)"></div>
         </div>
         <div style="font-size:.68rem;font-weight:700;color:var(--gray);margin:13px 0 7px;letter-spacing:.3px">🌡️ PELO CLIMA DE AGORA</div>
         <div class="wx wx-load" id="${rid}-weather"><span class="wx-spin">📡</span><div class="wx-body">Buscando o clima do seu local…</div></div>
         <div style="font-size:.68rem;font-weight:700;color:var(--gray);margin:13px 0 7px;letter-spacing:.3px">🎯 EC ALVO RÁPIDO (por estação)</div>
         <div class="quick-row" id="${rid}-ecpreset">
-          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1.30)<.005?'on':''}" data-ec="1.30" onclick="setF('${rid}','alvo',1.30)">☀️ 1,30</button>
-          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1.41)<.005?'on':''}" data-ec="1.41" onclick="setF('${rid}','alvo',1.41)">🌤️ 1,41</button>
-          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1.60)<.005?'on':''}" data-ec="1.60" onclick="setF('${rid}','alvo',1.60)">❄️ 1,60</button>
+          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1300)<5?'on':''}" data-ec="1300" onclick="setF('${rid}','alvo',1300)">☀️ 1.300</button>
+          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1410)<5?'on':''}" data-ec="1410" onclick="setF('${rid}','alvo',1410)">🌤️ 1.410</button>
+          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1600)<5?'on':''}" data-ec="1600" onclick="setF('${rid}','alvo',1600)">❄️ 1.600</button>
         </div>
         <div class="season" id="${rid}-season"></div>
         <div style="font-size:.68rem;font-weight:700;color:var(--gray);margin:13px 0 7px;letter-spacing:.3px">🪣 VOLUME</div>
@@ -511,7 +512,7 @@ function buildRecipeScreen(rid){
 
     <div id="p-${rid}-rec" style="display:none">
       <div class="card">
-        <div class="card-ttl"><span class="ci">📋</span>Receita cheia · EC ${rec.ecBase.toFixed(2)}</div>
+        <div class="card-ttl"><span class="ci">📋</span>Receita cheia · EC ${ecf(rec.ecBase)}</div>
         <div class="vol-row"><span class="vl">Volume</span><button class="vol-btn rip" onclick="adjRecVol('${rid}','rec',-100)">−</button>
           <input class="vol-inp" id="${rid}-rvol" type="number" value="3000" oninput="recRec('${rid}')"><button class="vol-btn rip" onclick="adjRecVol('${rid}','rec',100)">+</button><span style="font-size:.78rem;color:var(--gray)">L</span></div>
       </div>
@@ -524,16 +525,16 @@ function buildRecipeScreen(rid){
       <div class="card">
         <div class="card-ttl"><span class="ci">⚡</span>Correção de EC</div>
         <div class="inp-grid g2">
-          <div class="inp-g"><label>EC atual</label><input type="number" id="${rid}-cAt" value="1.0" step="0.01" oninput="corrRec('${rid}')"><div class="unit">mS/cm</div></div>
-          <div class="inp-g"><label>EC desejado</label><input type="number" id="${rid}-cDs" value="${rec.ecAlvo}" step="0.01" oninput="corrRec('${rid}')"><div class="unit">mS/cm</div></div>
+          <div class="inp-g"><label>EC atual</label><input type="number" id="${rid}-cAt" value="1000" step="10" oninput="corrRec('${rid}')"><div class="unit">µS/cm</div></div>
+          <div class="inp-g"><label>EC desejado</label><input type="number" id="${rid}-cDs" value="${rec.ecAlvo}" step="10" oninput="corrRec('${rid}')"><div class="unit">µS/cm</div></div>
         </div>
         <div style="font-size:.68rem;font-weight:700;color:var(--gray);margin:2px 0 7px;letter-spacing:.3px">🌡️ PELO CLIMA DE AGORA</div>
         <div class="wx wx-load" id="${rid}-cweather"><span class="wx-spin">📡</span><div class="wx-body">Buscando o clima do seu local…</div></div>
         <div style="font-size:.68rem;font-weight:700;color:var(--gray);margin:13px 0 7px;letter-spacing:.3px">🎯 EC DESEJADO RÁPIDO (por estação)</div>
         <div class="quick-row" id="${rid}-cecpreset">
-          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1.30)<.005?'on':''}" data-ec="1.30" onclick="setCorrDs('${rid}',1.30)">☀️ 1,30</button>
-          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1.41)<.005?'on':''}" data-ec="1.41" onclick="setCorrDs('${rid}',1.41)">🌤️ 1,41</button>
-          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1.60)<.005?'on':''}" data-ec="1.60" onclick="setCorrDs('${rid}',1.60)">❄️ 1,60</button>
+          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1300)<5?'on':''}" data-ec="1300" onclick="setCorrDs('${rid}',1300)">☀️ 1.300</button>
+          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1410)<5?'on':''}" data-ec="1410" onclick="setCorrDs('${rid}',1410)">🌤️ 1.410</button>
+          <button class="qbtn rip ${Math.abs(rec.ecAlvo-1600)<5?'on':''}" data-ec="1600" onclick="setCorrDs('${rid}',1600)">❄️ 1.600</button>
         </div>
         <div class="season" id="${rid}-cseason"></div>
         <div style="font-size:.68rem;font-weight:700;color:var(--gray);margin:13px 0 7px;letter-spacing:.3px">🪣 VOLUME DO TANQUE</div>
@@ -586,27 +587,27 @@ function calcRec(rid, animate){
   out.className = animate ? 'res-anim' : '';
   if(delta<=0){
     const litros=(vol*(agua/alvo-1)).toFixed(0);
-    out.innerHTML=`<div class="alrt alrt-w"><span class="ai">⚠️</span><div>EC da água (${agua.toFixed(2)}) ≥ EC alvo (${alvo.toFixed(2)}). Não adicione fertilizante.<br>💧 Para baixar até ${alvo.toFixed(2)} em ${nf(vol)} L, adicione <strong>${nf(litros)} L de água pura</strong>.</div></div>`;
+    out.innerHTML=`<div class="alrt alrt-w"><span class="ai">⚠️</span><div>EC da água (${ecf(agua)}) ≥ EC alvo (${ecf(alvo)}). Não adicione fertilizante.<br>💧 Para baixar até ${ecf(alvo)} em ${nf(vol)} L, adicione <strong>${nf(litros)} L de água pura</strong>.</div></div>`;
     return;
   }
   const frac=delta/rec.ecBase, sBar=Math.min(frac,1).toFixed(3);
   let html=`<button class="share-btn rip" onclick="shareRec('${rid}')">📤 Enviar / copiar receita</button>
   <div class="ec-badge">
     <div class="ecb-top">
-      <div><div class="ecb-lbl">EC final da solução</div><div class="ecb-num">${alvo.toFixed(2)}<small>mS/cm</small></div></div>
-      <div class="ecb-side">💧 água ${agua.toFixed(2)}<br>🧪 ferts +${delta.toFixed(2)}</div>
+      <div><div class="ecb-lbl">EC final da solução</div><div class="ecb-num">${ecf(alvo)}<small>µS/cm</small></div></div>
+      <div class="ecb-side">💧 água ${ecf(agua)}<br>🧪 ferts +${ecf(delta)}</div>
     </div>
     <div class="ecb-prog"><i style="--s:${sBar}"></i></div>
     <div class="ecb-pct">${(frac*100).toFixed(0)}% da receita cheia</div>
   </div>`;
-  if(frac>1.15) html+=`<div class="alrt alrt-w"><span class="ai">⚠️</span><div>Fração ${(frac*100).toFixed(0)}% — acima da receita cheia. Confira o EC alvo (máx. útil ≈ ${(rec.ecBase+agua).toFixed(2)}).</div></div>`;
+  if(frac>1.15) html+=`<div class="alrt alrt-w"><span class="ai">⚠️</span><div>Fração ${(frac*100).toFixed(0)}% — acima da receita cheia. Confira o EC alvo (máx. útil ≈ ${ecf(rec.ecBase+agua)}).</div></div>`;
   html+=baldeBlocksHTML(rec,frac,vol);
   html+=`<div class="card"><div class="card-ttl"><span class="ci">📝</span>Ordem de preparo</div><div class="steps">${stepsHTML(rec,frac,vol,agua,alvo)}</div></div>`;
   out.innerHTML=html;
 }
 function stepsHTML(rec,frac,vol,agua,alvo){
   const two=rec.baldes.length>1, dose=f=>fmtG(f.g*frac*(vol/REF_VOL));
-  let s=`<div class="step"><strong>Meça a água</strong><p>Confirme EC (${agua.toFixed(2)} mS/cm) e pH (5,5–6,5) antes de adicionar fertilizante.</p></div>`;
+  let s=`<div class="step"><strong>Meça a água</strong><p>Confirme EC (${ecf(agua)} µS/cm) e pH (5,5–6,5) antes de adicionar fertilizante.</p></div>`;
   rec.baldes.forEach(b=>{
     const first=b.ferts.find(f=>f.first), macros=b.ferts.filter(f=>!f.first&&!f.micro), micros=b.ferts.filter(f=>f.micro);
     const bn=two?` (${b.nome})`:'';
@@ -620,7 +621,7 @@ function stepsHTML(rec,frac,vol,agua,alvo){
   } else {
     s+=`<div class="step"><strong>Adicione ao reservatório</strong><p>Despeje nos ${nf(vol)} L e misture bem.</p></div>`;
   }
-  s+=`<div class="step"><strong>Complete e ajuste</strong><p>Complete até ${nf(vol)} L. pH 5,8–6,2. EC esperado: <strong>${alvo.toFixed(2)} mS/cm</strong>.</p></div>`;
+  s+=`<div class="step"><strong>Complete e ajuste</strong><p>Complete até ${nf(vol)} L. pH 5,8–6,2. EC esperado: <strong>${ecf(alvo)} µS/cm</strong>.</p></div>`;
   return s;
 }
 
@@ -630,7 +631,7 @@ function shareRec(rid){
   const agua=val(rid+'-agua',0), alvo=val(rid+'-alvo',rec.ecAlvo), vol=Math.max(1,val(rid+'-vol',3000));
   const delta=alvo-agua; if(delta<=0){ toast('Ajuste o EC alvo primeiro'); return; }
   const frac=delta/rec.ecBase;
-  let txt=`🥬 ${rec.nome} — ${nf(vol)} L\n🎯 EC alvo ${alvo.toFixed(2)} (água ${agua.toFixed(2)}) mS/cm\n`;
+  let txt=`🥬 ${rec.nome} — ${nf(vol)} L\n🎯 EC alvo ${ecf(alvo)} (água ${ecf(agua)}) µS/cm\n`;
   rec.baldes.forEach(b=>{
     if(rec.baldes.length>1) txt+=`\n${b.nome}:`;
     b.ferts.forEach(f=>{ txt+=`\n• ${f.nome}: ${fmtG(f.g*frac*(vol/REF_VOL))}`; });
@@ -653,7 +654,7 @@ function recRec(rid){
     if(macros.length) s+=`<div class="step"><strong>Macros${bn}</strong><p>${macros.map(f=>`${f.nome}: <strong>${dose(f)}</strong>`).join(' · ')}</p></div>`;
     if(micros.length) s+=`<div class="step"><strong>Micros${bn}</strong><p>${micros.map(f=>`${f.nome}: <strong>${dose(f)}</strong>`).join(' · ')}. Dissolva em água morna.</p></div>`;
   });
-  s+=`<div class="step"><strong>Diluir e ajustar</strong><p>Complete até ${nf(vol)} L. EC ≈ ${rec.ecBase.toFixed(2)} mS/cm (sem o EC da água). pH 5,8–6,2.</p></div>`;
+  s+=`<div class="step"><strong>Diluir e ajustar</strong><p>Complete até ${nf(vol)} L. EC ≈ ${ecf(rec.ecBase)} µS/cm (sem o EC da água). pH 5,8–6,2.</p></div>`;
   document.getElementById(rid+'-rec-steps').innerHTML=s;
 }
 
@@ -661,19 +662,19 @@ function recRec(rid){
 function corrRec(rid){
   const rec=RECIPES[rid], t=rec.tag;
   const at=val(rid+'-cAt',0), ds=val(rid+'-cDs',rec.ecAlvo), vol=Math.max(1,val(rid+'-cvol',3000));
-  const ecp=document.getElementById(rid+'-cecpreset'); if(ecp) ecp.querySelectorAll('.qbtn').forEach(b=>b.classList.toggle('on',Math.abs(+b.dataset.ec-ds)<0.005));
+  const ecp=document.getElementById(rid+'-cecpreset'); if(ecp) ecp.querySelectorAll('.qbtn').forEach(b=>b.classList.toggle('on',Math.abs(+b.dataset.ec-ds)<5));
   const out=document.getElementById(rid+'-corr-out'), delta=ds-at;
-  if(Math.abs(delta)<0.005){ out.innerHTML='<div class="alrt alrt-ok"><span class="ai">✅</span><div>EC já no valor desejado.</div></div>'; return; }
+  if(Math.abs(delta)<5){ out.innerHTML='<div class="alrt alrt-ok"><span class="ai">✅</span><div>EC já no valor desejado.</div></div>'; return; }
   if(delta<0){
     const l=(vol*(at/ds-1)).toFixed(0);
-    out.innerHTML=`<div class="alrt alrt-w"><span class="ai">💧</span><div>Diluir: adicione <strong>${nf(l)} L de água pura</strong>.<br><small>${nf(vol)} L × (${at.toFixed(2)}/${ds.toFixed(2)} − 1)</small></div></div>`;
+    out.innerHTML=`<div class="alrt alrt-w"><span class="ai">💧</span><div>Diluir: adicione <strong>${nf(l)} L de água pura</strong>.<br><small>${nf(vol)} L × (${ecf(at)}/${ecf(ds)} − 1)</small></div></div>`;
     return;
   }
   const frac=delta/rec.ecBase;
   const doses=allFerts(rec).map(f=>({...f,_g:f.g*frac*(vol/REF_VOL)}));
   const maxG=Math.max(...doses.map(d=>d._g),1e-9);
   out.innerHTML=`<div class="res-balde res-${t}">
-    <div class="balde-tag balde-tag-${t}" style="display:flex;justify-content:space-between;width:100%">➕ Adicionar — ${nf(vol)} L<span class="fert-pill pill-${t}">+${delta.toFixed(2)} mS/cm</span></div>
+    <div class="balde-tag balde-tag-${t}" style="display:flex;justify-content:space-between;width:100%">➕ Adicionar — ${nf(vol)} L<span class="fert-pill pill-${t}">+${ecf(delta)} µS/cm</span></div>
     ${doses.map(f=>fertRowHTML(f,t,0,maxG)).join('')}
   </div>`;
 }
@@ -682,23 +683,23 @@ function corrRec(rid){
 function tabRec(rid){
   const rec=RECIPES[rid], t=rec.tag, vol=Math.max(1,val(rid+'-tvol',3000));
   document.getElementById(rid+'-tvol-lbl').textContent=nf(vol);
-  const ferts=allFerts(rec), deltas=Array.from({length:20},(_,k)=>(k+1)/10);
+  const ferts=allFerts(rec), deltas=Array.from({length:20},(_,k)=>(k+1)*100);
   const th=`<th class="th-${t}">ΔEC</th>`+ferts.map(f=>`<th class="th-${t}">${f.nome.split(' ')[0]}</th>`).join('');
   const rows=deltas.map((d,i)=>{
     const over=d>rec.ecBase+1e-9, frac=d/rec.ecBase;
     const bg=over?'#fff7ed':(i%2?'#fff':'#f7faf7');
-    let c=`<td class="td-d td-d-${t}">${d.toFixed(1)}${over?' ⚠':''}</td>`;
+    let c=`<td class="td-d td-d-${t}">${nf(d)}${over?' ⚠':''}</td>`;
     ferts.forEach(f=>{ c+=`<td style="background:${bg}${over?';color:#b45309':''}">${fmtG(f.g*frac*(vol/REF_VOL))}</td>`; });
     return `<tr>${c}</tr>`;
   }).join('');
   document.getElementById(rid+'-tab-out').innerHTML=`<table class="corr-tbl"><thead><tr>${th}</tr></thead><tbody>${rows}</tbody></table>
-    <div style="padding:10px 14px;font-size:.64rem;color:var(--gray)">EC base ${rec.nome}: ${rec.ecBase.toFixed(3)} mS/cm (receita cheia em 3000 L). Linhas com ⚠ passam de 100% da receita cheia (solução mais concentrada que o normal).</div>`;
+    <div style="padding:10px 14px;font-size:.64rem;color:var(--gray)">EC base ${rec.nome}: ${ecf(rec.ecBase)} µS/cm (receita cheia em 3000 L). Linhas com ⚠ passam de 100% da receita cheia (solução mais concentrada que o normal).</div>`;
 }
 
 // ── COMPARAR ──
 function cmpVol(v){ document.getElementById('cmp-vol').value=v; document.querySelectorAll('#s-cmp .qbtn').forEach(b=>b.classList.toggle('on',b.textContent===v+'L')); compare(); }
 function compare(){
-  const agua=val('cmp-agua',0), alvo=val('cmp-alvo',1.41), vol=Math.max(1,val('cmp-vol',3000));
+  const agua=val('cmp-agua',0), alvo=val('cmp-alvo',1410), vol=Math.max(1,val('cmp-vol',3000));
   const delta=alvo-agua, out=document.getElementById('cmp-out');
   if(delta<=0){ out.innerHTML='<div class="alrt alrt-w"><span class="ai">⚠️</span><div>EC alvo deve ser maior que o EC da água.</div></div>'; return; }
   function col(rid){
@@ -706,14 +707,14 @@ function compare(){
     const rows=ferts.map(f=>`<div class="cmp-row"><span class="n">${f.nome}</span><span class="v">${fmtG(f.g*frac*(vol/REF_VOL))}</span></div>`).join('');
     const tot=ferts.reduce((s,f)=>s+f.g*frac*(vol/REF_VOL),0);
     return `<div class="cmp-col cmp-${t}">
-      <div class="cmp-h cmp-h-${t}">${icon(rec)} ${rec.nome}<small>EC base ${rec.ecBase.toFixed(2)}</small></div>
+      <div class="cmp-h cmp-h-${t}">${icon(rec)} ${rec.nome}<small>EC base ${ecf(rec.ecBase)}</small></div>
       ${rows}
       <div class="cmp-tot cmp-tot-${t}"><span>Total</span><span>${fmtG(tot)}</span></div>
       <div class="cmp-frac">${(frac*100).toFixed(0)}% da receita${frac>1.15?' ⚠️':''}</div>
     </div>`;
   }
   out.innerHTML=`<div class="cmp-grid">${col('yara')}${col('haifa')}</div>
-    <div class="note">Para ${nf(vol)} L mirando EC ${alvo.toFixed(2)} (água ${agua.toFixed(2)}). As duas chegam ao mesmo EC; a diferença está em quais adubos e quanta massa cada marca exige. Custo por marca chega na próxima versão.</div>`;
+    <div class="note">Para ${nf(vol)} L mirando EC ${ecf(alvo)} (água ${ecf(agua)}). As duas chegam ao mesmo EC; a diferença está em quais adubos e quanta massa cada marca exige. Custo por marca chega na próxima versão.</div>`;
 }
 
 // ── NAVEGAÇÃO ──
