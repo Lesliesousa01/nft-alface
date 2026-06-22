@@ -254,6 +254,27 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
 #s-haifa .tab.on{background:linear-gradient(135deg,var(--ha2),var(--ha));color:#fff;box-shadow:0 6px 16px rgba(123,31,162,.42)}
 #s-haifa .season .sbtn,#s-haifa .wx .sbtn{background:linear-gradient(135deg,var(--ha2),var(--has));box-shadow:0 4px 12px rgba(123,31,162,.4)}
 #s-haifa .share-btn{background:linear-gradient(135deg,var(--ha2),var(--has));box-shadow:0 6px 16px rgba(123,31,162,.38)}
+
+/* ── PREÇOS / CUSTO ── */
+.price-row{padding:11px 0;border-bottom:1px solid var(--line)}
+.price-row:last-child{border:none}
+.price-nm{font-size:.82rem;font-weight:700;color:var(--ink);margin-bottom:7px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.ptag{font-size:.54rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px;padding:2px 7px;border-radius:7px}
+.ptag-ya{background:var(--yab);color:var(--ya2)} .ptag-ha{background:var(--hab);color:var(--ha2)} .ptag-both{background:#e8eef0;color:#4a5568}
+.price-line{display:flex;align-items:flex-end;gap:8px}
+.price-f{flex:1;min-width:0}
+.price-f label{display:block;font-size:.6rem;font-weight:700;color:var(--gray);margin-bottom:3px}
+.price-f input{width:100%;padding:9px 8px;border:1.5px solid #e3e8e4;border-radius:11px;font-size:.95rem;font-weight:800;text-align:center;outline:none;color:var(--ink);background:#fbfcfb}
+.price-f input:focus{border-color:var(--gl);background:#fff}
+.price-res{flex:0 0 auto;font-size:.72rem;font-weight:800;color:var(--g2);background:var(--gbg);padding:9px 9px;border-radius:11px;white-space:nowrap;min-width:82px;text-align:center}
+.cost-big{font-size:1.45rem;font-weight:900;text-align:center;margin-top:4px}
+.cost-winner{margin-top:12px;background:var(--gbg);border:1px solid #c8e6c9;border-radius:13px;padding:12px 14px;font-size:.82rem;color:#1b5e20;text-align:center;line-height:1.5}
+.cost-row{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:.78rem;align-items:center}
+.cost-row:last-child{border:none}
+.cost-row span:first-child{color:#556;font-weight:600} .cost-row span:last-child{font-weight:800;text-align:right;line-height:1.5}
+.cost-save{margin-top:11px;background:#fff7e8;border:1px solid #ffe2b0;border-radius:13px;padding:11px 14px;font-size:.82rem;color:#7a4d00;text-align:center}
+.lnk-btn{margin-top:9px;border:none;background:linear-gradient(135deg,var(--g2),var(--gl));color:#fff;font-weight:800;font-size:.78rem;padding:10px 15px;border-radius:11px;cursor:pointer;box-shadow:0 4px 12px rgba(46,125,50,.35)}
+.lnk-btn:active{transform:scale(.96)}
 </style>
 </head>
 <body>
@@ -286,10 +307,32 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
       <div id="cmp-out"></div>
     </div>
 
+    <!-- PREÇOS -->
+    <div class="screen" id="s-prices">
+      <div class="card">
+        <div class="card-ttl"><span class="ci">💲</span>Preços dos adubos</div>
+        <div class="howto">Digite o <b>preço do saco</b> e <b>quantos kg</b> vêm nele — o app calcula o R$/kg e usa no estudo de custo (aba Comparar). Fica salvo só no seu aparelho. 🔵 Yara · 🟣 Haifa · cinza = usado nas duas.</div>
+        <div class="inp-grid g2">
+          <div class="inp-g"><label>🏪 Loja</label><input type="text" id="cfg-loja" placeholder="Isaflora / Adubos Real" oninput="setCfg('loja',this.value)" style="font-size:.8rem;font-weight:700;text-align:left;padding:11px"><div class="unit">Biritiba Mirim</div></div>
+          <div class="inp-g"><label>📅 Cotação</label><input type="text" id="cfg-data" placeholder="jun/2026" oninput="setCfg('data',this.value)" style="font-size:.8rem;font-weight:700;text-align:left;padding:11px"><div class="unit">mês/ano</div></div>
+        </div>
+        <div id="prices-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-ttl"><span class="ci">🏡</span>Minhas estufas · projeção mensal</div>
+        <div class="inp-grid">
+          <div class="inp-g"><label>🏡 Estufas</label><input type="number" id="cfg-estufas" value="2" step="1" min="1" oninput="setCfg('estufas',this.value);compare()"><div class="unit">quantas</div></div>
+          <div class="inp-g"><label>🪣 Volume cada</label><input type="number" id="cfg-volume" value="3000" step="100" min="1" oninput="setCfg('volume',this.value);compare()"><div class="unit">litros</div></div>
+          <div class="inp-g"><label>🔄 Trocas</label><input type="number" id="cfg-trocas" value="2" step="1" min="1" oninput="setCfg('trocas',this.value);compare()"><div class="unit">por mês</div></div>
+        </div>
+        <div class="note">A projeção multiplica o custo por litro × volume × nº de estufas × trocas de solução no mês. Veja o resultado na aba <b>Comparar</b>.</div>
+      </div>
+    </div>
+
     <!-- SOBRE -->
     <div class="screen" id="s-info">
       <div class="card">
-        <div class="card-ttl"><span class="ci">🥬</span>NFT Alface — v2.9</div>
+        <div class="card-ttl"><span class="ci">🥬</span>NFT Alface — v3.0</div>
         <div class="note" style="margin-bottom:14px">Cálculo de solução nutritiva para alface em NFT. Duas receitas de marcas diferentes, lidas direto das planilhas laminadas. <strong>dose = g(3000L) × ΔEC ÷ EC_base × (volume ÷ 3000)</strong>, com ΔEC = EC alvo − EC da água.</div>
         <span class="slbl">🔵 Alface Yara · EC base 1.410 µS/cm</span>
         <div style="font-size:.78rem;line-height:1.8;margin-bottom:12px;color:#445">
@@ -305,7 +348,8 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
           • Dissolver o nitrato de cálcio <strong>separado</strong> dos fosfatos.<br>
           • Na Haifa, diluir o Balde A no reservatório antes do Balde B.<br>
           • A recomendação <strong>🌡️ pelo clima de agora</strong> (abas Calcular/Correção) usa a temperatura real do seu local via Open-Meteo: ≥25°C → EC 1.300 · 18–25°C → 1.410 · &lt;18°C → 1.600 µS/cm. Sem internet/permissão, volta pra sugestão por estação.<br>
-          • pH alvo: 5,8–6,2. Em breve: histórico de preparo e custo por marca.
+          • <strong>💲 Preços</strong>: cadastre o preço do saco de cada adubo (salvo no aparelho) e a aba <strong>Comparar</strong> mostra o estudo de custo Yara × Haifa: por preparo, por 1.000 L e projeção mensal das suas estufas.<br>
+          • pH alvo: 5,8–6,2. Em breve: histórico de preparo.
         </div>
       </div>
     </div>
@@ -316,6 +360,7 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
     <button class="bnbtn rip on-ya" id="bn-yara" onclick="goTo('yara')"><span class="ico">🔵</span><span>Yara</span></button>
     <button class="bnbtn rip" id="bn-haifa" onclick="goTo('haifa')"><span class="ico">🟣</span><span>Haifa</span></button>
     <button class="bnbtn rip" id="bn-cmp" onclick="goTo('cmp')"><span class="ico">⚖️</span><span>Comparar</span></button>
+    <button class="bnbtn rip" id="bn-prices" onclick="goTo('prices')"><span class="ico">💲</span><span>Preços</span></button>
     <button class="bnbtn rip" id="bn-info" onclick="goTo('info')"><span class="ico">ℹ️</span><span>Sobre</span></button>
   </div>
   <div id="toast"></div>
@@ -714,11 +759,85 @@ function compare(){
     </div>`;
   }
   out.innerHTML=`<div class="cmp-grid">${col('yara')}${col('haifa')}</div>
-    <div class="note">Para ${nf(vol)} L mirando EC ${ecf(alvo)} (água ${ecf(agua)}). As duas chegam ao mesmo EC; a diferença está em quais adubos e quanta massa cada marca exige. Custo por marca chega na próxima versão.</div>`;
+    <div class="note">Para ${nf(vol)} L mirando EC ${ecf(alvo)} (água ${ecf(agua)}). As duas chegam ao mesmo EC; a diferença está em quais adubos e quanta massa cada marca exige.</div>
+    ${costBlock(vol,delta)}`;
+}
+
+// ── PREÇOS / CUSTO ──
+let PRICES = (function(){ try{ return JSON.parse(localStorage.getItem('nft_precos')||'{}'); }catch(e){ return {}; } })();
+let CFG = (function(){ try{ return Object.assign({estufas:2,volume:3000,trocas:2,loja:'',data:''},JSON.parse(localStorage.getItem('nft_estufas')||'{}')); }catch(e){ return {estufas:2,volume:3000,trocas:2,loja:'',data:''}; } })();
+function savePrices(){ localStorage.setItem('nft_precos',JSON.stringify(PRICES)); }
+function saveCfg(){ localStorage.setItem('nft_estufas',JSON.stringify(CFG)); }
+function slug(s){ return s.replace(/[^a-zA-Z0-9]/g,'_'); }
+function money(v){ return 'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function rkg(nome){ const p=PRICES[nome]; return (p&&p.saco>0&&p.kg>0)? p.saco/p.kg : null; }
+function productList(){
+  const seen={}, list=[];
+  ['yara','haifa'].forEach(rid=>allFerts(RECIPES[rid]).forEach(f=>{
+    if(seen[f.nome]){ if(!seen[f.nome].tags.includes(rid)) seen[f.nome].tags.push(rid); return; }
+    seen[f.nome]={nome:f.nome,tags:[rid]}; list.push(seen[f.nome]);
+  }));
+  return list;
+}
+function recipeCost(rec,frac,vol){
+  let total=0; const faltam=[];
+  allFerts(rec).forEach(f=>{ const g=f.g*frac*(vol/REF_VOL), r=rkg(f.nome);
+    if(r==null) faltam.push(f.nome); else total+=(g/1000)*r; });
+  return {total,faltam};
+}
+function setPrice(nome,campo,v){
+  if(!PRICES[nome]) PRICES[nome]={};
+  PRICES[nome][campo]=parseFloat(String(v).replace(',','.'))||0;
+  savePrices();
+  const el=document.getElementById('pr-res-'+slug(nome));
+  if(el){ const r=rkg(nome); el.textContent = r==null?'—':money(r)+'/kg'; }
+}
+function setCfg(campo,v){
+  CFG[campo]=(campo==='loja'||campo==='data')? v : (parseFloat(String(v).replace(',','.'))||0);
+  saveCfg();
+}
+function renderPrices(){
+  const el=document.getElementById('prices-list'); if(!el) return;
+  el.innerHTML = productList().map(p=>{
+    const pr=PRICES[p.nome]||{}, r=rkg(p.nome);
+    const both=p.tags.length>1, cls=both?'both':(p.tags[0]==='yara'?'ya':'ha');
+    const marca=both?'Yara+Haifa':(p.tags[0]==='yara'?'Yara':'Haifa');
+    const nm=p.nome.replace(/'/g,"\\'");
+    return `<div class="price-row">
+      <div class="price-nm">${p.nome} <span class="ptag ptag-${cls}">${marca}</span></div>
+      <div class="price-line">
+        <div class="price-f"><label>R$ saco</label><input type="number" inputmode="decimal" value="${pr.saco||''}" oninput="setPrice('${nm}','saco',this.value)"></div>
+        <div class="price-f"><label>kg saco</label><input type="number" inputmode="decimal" value="${pr.kg||''}" oninput="setPrice('${nm}','kg',this.value)"></div>
+        <div class="price-res" id="pr-res-${slug(p.nome)}">${r==null?'—':money(r)+'/kg'}</div>
+      </div>
+    </div>`;
+  }).join('');
+  ['loja','data','estufas','volume','trocas'].forEach(k=>{ const i=document.getElementById('cfg-'+k); if(i&&CFG[k]!=null&&CFG[k]!=='') i.value=CFG[k]; });
+}
+function costBlock(vol,delta){
+  const cy=recipeCost(RECIPES.yara,delta/RECIPES.yara.ecBase,vol);
+  const ch=recipeCost(RECIPES.haifa,delta/RECIPES.haifa.ecBase,vol);
+  const faltam=[...new Set([...cy.faltam,...ch.faltam])];
+  if(faltam.length) return `<div class="alrt alrt-i"><span class="ai">💲</span><div>Pra calcular o custo, falta o preço de: <strong>${faltam.join(' · ')}</strong>.<br><button class="lnk-btn rip" onclick="goTo('prices')">💲 Cadastrar preços</button></div></div>`;
+  const dif=Math.abs(cy.total-ch.total), yaMenor=cy.total<=ch.total, barata=yaMenor?'Yara':'Haifa', cara=yaMenor?ch.total:cy.total;
+  const eco=cara>0?dif/cara*100:0;
+  const v3=CFG.volume||3000, est=CFG.estufas||1, tr=CFG.trocas||1;
+  const mesY=cy.total/vol*v3*est*tr, mesH=ch.total/vol*v3*est*tr;
+  return `<div class="slbl" style="margin-top:18px">💰 CUSTO DO PREPARO · ${nf(vol)} L</div>
+  <div class="cmp-grid">
+    <div class="cmp-col cmp-ya"><div class="cmp-h cmp-h-ya">🔵 Yara</div><div class="cost-big" style="color:var(--ya2)">${money(cy.total)}</div></div>
+    <div class="cmp-col cmp-ha"><div class="cmp-h cmp-h-ha">🟣 Haifa</div><div class="cost-big" style="color:var(--ha2)">${money(ch.total)}</div></div>
+  </div>
+  <div class="cost-winner">✅ <b>${barata}</b> sai mais barata neste preparo — economia de <b>${money(dif)}</b> (${eco.toFixed(0)}%)</div>
+  <div class="card" style="margin-top:13px">
+    <div class="cost-row"><span>💧 Custo por 1.000 L</span><span>🔵 ${money(cy.total/vol*1000)}<br>🟣 ${money(ch.total/vol*1000)}</span></div>
+    <div class="cost-row"><span>📅 ${est} estufa(s) · ${nf(v3)} L · ${tr}×/mês</span><span>🔵 ${money(mesY)}<br>🟣 ${money(mesH)}</span></div>
+    <div class="cost-save">No mês, <b>${barata}</b> economiza ~<b>${money(Math.abs(mesY-mesH))}</b></div>
+  </div>`;
 }
 
 // ── NAVEGAÇÃO ──
-const LBL={yara:'Yara',haifa:'Haifa',cmp:'Comparar',info:'Sobre'};
+const LBL={yara:'Yara',haifa:'Haifa',cmp:'Comparar',prices:'Preços',info:'Sobre'};
 function goTo(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('s-'+id).classList.add('active');
@@ -729,6 +848,7 @@ function goTo(id){
   document.getElementById('content').scrollTop=0;
   if(id==='yara'||id==='haifa') calcRec(id,true);
   if(id==='cmp') compare();
+  if(id==='prices') renderPrices();
 }
 function swTab(rid,tab){
   ['calc','rec','corr','tab'].forEach(p=>{document.getElementById('p-'+rid+'-'+p).style.display='none';document.getElementById('t-'+rid+'-'+p).classList.remove('on');});
@@ -763,6 +883,7 @@ window.onload=function(){
     calcRec(rid,true); recRec(rid); corrRec(rid); tabRec(rid);
   });
   compare();
+  renderPrices();
   fetchWeather();
 };
 </script>
