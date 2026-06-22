@@ -304,7 +304,7 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
         <div style="font-size:.74rem;color:var(--gray);line-height:1.75">
           • Dissolver o nitrato de cálcio <strong>separado</strong> dos fosfatos.<br>
           • Na Haifa, diluir o Balde A no reservatório antes do Balde B.<br>
-          • A recomendação <strong>🌡️ pelo clima de agora</strong> (abas Calcular/Correção) usa a temperatura real do seu local via Open-Meteo: ≥28°C → EC 1.300 · 18–28°C → 1.410 · &lt;18°C → 1.600 µS/cm. Sem internet/permissão, volta pra sugestão por estação.<br>
+          • A recomendação <strong>🌡️ pelo clima de agora</strong> (abas Calcular/Correção) usa a temperatura real do seu local via Open-Meteo: ≥25°C → EC 1.300 · 18–25°C → 1.410 · &lt;18°C → 1.600 µS/cm. Sem internet/permissão, volta pra sugestão por estação.<br>
           • pH alvo: 5,8–6,2. Em breve: histórico de preparo e custo por marca.
         </div>
       </div>
@@ -407,7 +407,7 @@ function setCorrDs(rid,v){ document.getElementById(rid+'-cDs').value=v; corrRec(
 // ── CLIMA AO VIVO → recomendação de EC pela temperatura atual do local ──
 let WEATHER=null, WX_STATE='loading';
 function ecFromTemp(t){
-  if(t>=28) return {ec:1300,nome:'Quente',emoji:'☀️',cls:'wx-hot', msg:'calor — mire <b>EC 1.300</b> pra alface não sofrer'};
+  if(t>=25) return {ec:1300,nome:'Quente',emoji:'☀️',cls:'wx-hot', msg:'calor — mire <b>EC 1.300</b> pra alface não sofrer'};
   if(t>=18) return {ec:1410,nome:'Ameno', emoji:'🌤️',cls:'wx-mild',msg:'clima ameno — <b>EC 1.410</b> padrão'};
   return            {ec:1600,nome:'Frio',  emoji:'❄️',cls:'wx-cold',msg:'frio — pode <b>subir o EC pra ~1.600</b>'};
 }
