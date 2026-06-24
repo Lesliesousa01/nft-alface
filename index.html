@@ -334,7 +334,7 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-sy
     <!-- SOBRE -->
     <div class="screen" id="s-info">
       <div class="card">
-        <div class="card-ttl"><span class="ci">🥬</span>NFT Alface — v3.1</div>
+        <div class="card-ttl"><span class="ci">🥬</span>NFT Alface — v3.2</div>
         <div class="note" style="margin-bottom:14px">Cálculo de solução nutritiva para alface em NFT. Duas receitas de marcas diferentes, lidas direto das planilhas laminadas. <strong>dose = g(3000L) × ΔEC ÷ EC_base × (volume ÷ 3000)</strong>, com ΔEC = EC alvo − EC da água.</div>
         <span class="slbl">🔵 Alface Yara · EC base 1.410 µS/cm</span>
         <div style="font-size:.78rem;line-height:1.8;margin-bottom:12px;color:#445">
@@ -915,6 +915,24 @@ window.onload=function(){
   renderPrices();
   fetchWeather();
 };
+
+// ── SERVICE WORKER (atualizacao automatica / anti-cache no iOS) ──
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      // Quando uma versao nova do app for detectada, recarrega para aplica-la.
+      reg.addEventListener('updatefound',function(){
+        var nw=reg.installing;
+        if(!nw) return;
+        nw.addEventListener('statechange',function(){
+          if(nw.state==='installed' && navigator.serviceWorker.controller){
+            location.reload(); // ja existia uma versao controlando -> e uma atualizacao
+          }
+        });
+      });
+    }).catch(function(){});
+  });
+}
 </script>
 </body>
 </html>
